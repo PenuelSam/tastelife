@@ -154,7 +154,8 @@
 .label {
   position: relative;
   display: block;
-  overflow: hidden;
+  /* Mask for the slide-in: clip top and bottom only, so the arrow can nudge right. */
+  clip-path: inset(0 -24px);
   line-height: 1.1;
 }
 
@@ -182,6 +183,8 @@
   stroke: currentColor;
   stroke-width: 2.5;
   stroke-linecap: square;
+  /* The square caps and the arrowhead's tip reach just past the viewBox. */
+  overflow: visible;
 }
 
 /* Soft white band swept across the bar by the attention loop. */
