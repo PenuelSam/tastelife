@@ -1,0 +1,162 @@
+/* MENU / CLOSE: identical box and type so the top bar doesn't jump on open. */
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  min-width: 44px;
+  min-height: 44px;
+  margin: -10px 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-family: var(--font-body), sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.toggle:focus-visible,
+.overlay a:focus-visible {
+  outline: 2px solid var(--cream);
+  outline-offset: 2px;
+}
+
+.icon {
+  display: block;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: var(--cream);
+  stroke-width: 3;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  height: 100svh;
+  padding: 18px 16px 28px;
+  overflow: hidden;
+  background: var(--maroon);
+  color: var(--cream);
+  visibility: hidden;
+  clip-path: inset(0% 0% 100% 0%);
+}
+
+/* Same 24px row as the 60px nav's centre line (18 + 12 = 30). */
+.top {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  height: 24px;
+}
+
+.initials {
+  font-family: var(--font-body), sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.list {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 6px;
+  border-top: 2px solid rgb(243 234 219 / 0.35);
+}
+
+.row:last-child {
+  border-bottom: 2px solid rgb(243 234 219 / 0.35);
+}
+
+.mask {
+  display: block;
+  overflow: hidden;
+}
+
+.wordInner {
+  display: block;
+  font-family: var(--font-display), sans-serif;
+  font-weight: 400;
+  font-size: 84px;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.num {
+  font-family: var(--font-body), sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.sub {
+  margin: 0;
+  padding: 4px 0;
+  list-style: none;
+  border-top: 2px solid rgb(243 234 219 / 0.35);
+}
+
+.subLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 40px;
+  font-family: var(--font-body), sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.bottom {
+  display: flex;
+  flex-shrink: 0;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.name {
+  margin: 0;
+  font-family: var(--font-script), cursive;
+  font-size: 34px;
+  line-height: 1;
+}
+
+.contact {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  font-family: var(--font-body), sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+@media (min-width: 768px) {
+  .menuButton,
+  .overlay {
+    display: none;
+  }
+}

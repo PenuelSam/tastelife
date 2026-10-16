@@ -1,4 +1,5 @@
 import Link from "next/link";
+import MobileMenu from "./MobileMenu";
 import styles from "./Nav.module.css";
 
 export default function Nav() {
@@ -18,6 +19,7 @@ export default function Nav() {
           <a href="mailto:[email]">Contact</a>
         </li>
       </ul>
+      <MobileMenu />
     </nav>
   );
 }
