@@ -246,7 +246,7 @@ export default function MobileMenu() {
             </div>
 
             <nav className={styles.list} aria-label="Site">
-              {bigRow("01", "Work", "/talent", true)}
+              {bigRow("01", "Work", "/work", true)}
               <ul className={`${styles.sub} ${styles.fade}`}>
                 {WORK_LINKS.map((link) => (
                   <li key={link.href}>

@@ -229,7 +229,7 @@ export default function HomeHero() {
                   <span className={styles.mask}>
                     <span className={styles.maskInner}>Taiwo</span>
                   </span>
-                  <TransitionLink href="/talent" className={styles.enter}>
+                  <TransitionLink href="/work" className={styles.enter}>
                     <span className={styles.sheen} aria-hidden="true" />
                     <span className={styles.label}>
                       <span className={styles.labelInner}>

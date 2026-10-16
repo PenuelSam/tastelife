@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
   },
   cacheComponents: true,
   partialPrefetching: true,
+  redirects() {
+    // /talent was renamed to /work; keep old links working.
+    return [{ source: "/talent", destination: "/work", permanent: true }];
+  },
 };
 
 export default nextConfig;

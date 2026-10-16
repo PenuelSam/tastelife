@@ -5,8 +5,8 @@ Brand:
 - Fonts via next/font/google: Anton (all display and headline type, uppercase), Pinyon Script (script accents), Archivo 400/600 (body, nav, small labels). Expose as CSS variables --font-display, --font-script, --font-body.
 - Look: bold flat poster style. Heavy condensed uppercase type, thick cream bars and frames on red. No gradients, no drop shadows, no rounded cards.
 
-Pages: / (homepage), /talent (Choose your Talent), /fashion-design, /styling, /modeling, /about.
-Shared nav: initials on the left linking to /, then Work (/talent), About (/about), Contact (mailto) on the right. Archivo 600, 13px, uppercase, 0.14em letter-spacing.
+Pages: / (homepage), /work (Explore my craft), /fashion-design, /styling, /modeling, /about.
+Shared nav: initials on the left linking to /, then Work (/work), About (/about), Contact (mailto) on the right. Archivo 600, 13px, uppercase, 0.14em letter-spacing.
 
 Rules:
 - Every animation and WebGL effect must respect prefers-reduced-motion: show the final, still state instead.

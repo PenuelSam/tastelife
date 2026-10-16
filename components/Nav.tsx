@@ -10,7 +10,7 @@ export default function Nav() {
       </TransitionLink>
       <ul className={styles.links}>
         <li>
-          <TransitionLink href="/talent">Work</TransitionLink>
+          <TransitionLink href="/work">Work</TransitionLink>
         </li>
         <li>
           <TransitionLink href="/about">About</TransitionLink>

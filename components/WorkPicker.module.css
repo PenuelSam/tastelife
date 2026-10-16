@@ -1,0 +1,228 @@
+.page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100svh - var(--nav-h));
+  padding: 28px clamp(16px, 4vw, 56px) 48px;
+  color: var(--cream);
+  text-align: center;
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 56px;
+  width: 100%;
+  max-width: 1040px;
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+/* STEP 01 ▬▬▬ PICK A LANE, spanning the full column. */
+.stepRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  margin: 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(16px, 1.8vw, 24px);
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.bar {
+  flex: 1 1 0;
+  min-width: 0;
+  height: clamp(12px, 1.4vw, 18px);
+  background: var(--cream);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-script), cursive;
+  font-weight: 400;
+  font-size: clamp(64px, 9vw, 128px);
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.lanes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(28px, 5vw, 72px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lane {
+  --square: clamp(150px, 16vw, 210px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  transition: opacity 0.3s ease;
+}
+
+.label {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(22px, 2.2vw, 30px);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.square {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: var(--square);
+  aspect-ratio: 1;
+  border: 10px solid var(--cream);
+  perspective: 700px;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hint {
+  margin: 0;
+  font-family: var(--font-body), sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+@media (max-width: 767px) {
+  .title {
+    white-space: normal;
+  }
+}
+
+/* float (up/down) > tilt (cursor) > spin (hover) > layers */
+.float,
+.tilt,
+.spin,
+.icon {
+  display: block;
+  transform-style: preserve-3d;
+}
+
+.float {
+  animation: float 4.2s ease-in-out infinite;
+}
+
+/* A third of a cycle apart, so the three never move together. */
+li:nth-child(2) .float {
+  animation-delay: -1.4s;
+}
+
+li:nth-child(3) .float {
+  animation-delay: -2.8s;
+}
+
+.tilt {
+  transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition: transform 0.25s ease-out;
+}
+
+/* 56% of the square's outer width (the square's content box is 20px narrower). */
+.icon {
+  position: relative;
+  width: calc(var(--square) * 0.56);
+  aspect-ratio: 1;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: none;
+  stroke-width: 5;
+  stroke-linecap: square;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
+/* Hover (or keyboard focus): lift, spin, dim the other lanes. */
+.lane:focus-visible {
+  outline: none;
+}
+
+.lane:focus-visible .square {
+  outline: 3px solid var(--cream);
+  outline-offset: 6px;
+}
+
+.lane:focus-visible .square {
+  transform: translateY(-10px) scale(1.06);
+}
+
+.lane:focus-visible .spin {
+  animation: spin 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.lanes:has(.lane:focus-visible) .lane:not(:focus-visible) {
+  opacity: 0.5;
+}
+
+@media (hover: hover) {
+  .lane:hover .square {
+    transform: translateY(-10px) scale(1.06);
+  }
+
+  .lane:hover .spin {
+    animation: spin 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  .lanes:has(.lane:hover) .lane:not(:hover) {
+    opacity: 0.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .float,
+  .lane:hover .spin,
+  .lane:focus-visible .spin {
+    animation: none;
+  }
+
+  .tilt {
+    transform: none;
+    transition: none;
+  }
+
+  .square,
+  .lane {
+    transition: none;
+  }
+}
