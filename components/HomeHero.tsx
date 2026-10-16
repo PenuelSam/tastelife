@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import LiquidPhoto, { type LiquidPhotoHandle } from "./LiquidPhoto";
+import { TransitionLink } from "./PageTransition";
 import styles from "./HomeHero.module.css";
 
 gsap.registerPlugin(useGSAP);
@@ -229,7 +229,7 @@ export default function HomeHero() {
                   <span className={styles.mask}>
                     <span className={styles.maskInner}>Taiwo</span>
                   </span>
-                  <Link href="/talent" className={styles.enter}>
+                  <TransitionLink href="/talent" className={styles.enter}>
                     <span className={styles.sheen} aria-hidden="true" />
                     <span className={styles.label}>
                       <span className={styles.labelInner}>
@@ -241,7 +241,7 @@ export default function HomeHero() {
                         </span>
                       </span>
                     </span>
-                  </Link>
+                  </TransitionLink>
                 </div>
                 <span className={styles.mask}>
                   <span className={styles.maskInner}>Adeoshun</span>

@@ -1,11 +1,20 @@
 "use client";
 
-import { useEffect, useId, useRef, useState, useSyncExternalStore, type KeyboardEvent } from "react";
+import {
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type KeyboardEvent,
+  type MouseEvent,
+} from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { usePageTransition } from "./PageTransition";
 import { useLenis } from "./SmoothScroll";
 import styles from "./MobileMenu.module.css";
 
@@ -35,6 +44,7 @@ export default function MobileMenu() {
   const pathname = usePathname();
   const [lastPathname, setLastPathname] = useState(pathname);
   const lenis = useLenis();
+  const { navigate } = usePageTransition();
   const menuId = useId();
 
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -42,6 +52,7 @@ export default function MobileMenu() {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
   const instantCloseRef = useRef(false);
+  const skipFocusReturnRef = useRef(false);
   const wasOpenRef = useRef(false);
 
   // Close on route change.
@@ -102,8 +113,7 @@ export default function MobileMenu() {
 
     if (!wasOpenRef.current) return;
     wasOpenRef.current = false;
-    // On a resize to desktop the MENU button is hidden, so there's nowhere to return focus.
-    const returnFocus = !instantCloseRef.current;
+    const returnFocus = !skipFocusReturnRef.current;
     if (instantCloseRef.current || reducedMotion()) {
       tl.progress(0).pause();
       gsap.set(overlay, { visibility: "hidden" });
@@ -111,6 +121,7 @@ export default function MobileMenu() {
       tl.timeScale(CLOSE_SPEED).reverse();
     }
     instantCloseRef.current = false;
+    skipFocusReturnRef.current = false;
     document.documentElement.style.overflow = "";
     lenis?.current?.start();
     // `inert` has already dropped focus from the overlay by now.
@@ -132,6 +143,8 @@ export default function MobileMenu() {
     const onChange = () => {
       if (!query.matches) return;
       instantCloseRef.current = true;
+      // The MENU button is hidden on desktop, so there's nowhere to return focus.
+      skipFocusReturnRef.current = true;
       setOpen(false);
     };
     query.addEventListener("change", onChange);
@@ -140,10 +153,17 @@ export default function MobileMenu() {
 
   const close = () => setOpen(false);
 
-  // Links to the current page don't change the route, so close directly.
-  // Other page links close via the route change once the new page is ready.
-  const closeIfCurrent = (href: string) => () => {
-    if (href === pathname) close();
+  // Page links go through the liquid transition: it pours over the open menu,
+  // and the route change closes the menu instantly underneath the full cover.
+  const goTo = (href: string) => (e: MouseEvent<HTMLAnchorElement>) => {
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    if (href === pathname) {
+      close();
+      return;
+    }
+    instantCloseRef.current = true;
+    navigate(href);
   };
 
   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
@@ -175,7 +195,7 @@ export default function MobileMenu() {
       </>
     );
     return isPage ? (
-      <Link href={href} className={styles.row} onClick={closeIfCurrent(href)}>
+      <Link href={href} className={styles.row} onClick={goTo(href)}>
         {content}
       </Link>
     ) : (
@@ -214,7 +234,7 @@ export default function MobileMenu() {
             onKeyDown={onKeyDown}
           >
             <div className={styles.top}>
-              <Link href="/" className={styles.initials} onClick={closeIfCurrent("/")}>
+              <Link href="/" className={styles.initials} onClick={goTo("/")}>
                 tastelife
               </Link>
               <button ref={closeButtonRef} type="button" className={styles.toggle} onClick={close}>
@@ -230,7 +250,7 @@ export default function MobileMenu() {
               <ul className={`${styles.sub} ${styles.fade}`}>
                 {WORK_LINKS.map((link) => (
                   <li key={link.href}>
-                    <Link href={link.href} className={styles.subLink} onClick={closeIfCurrent(link.href)}>
+                    <Link href={link.href} className={styles.subLink} onClick={goTo(link.href)}>
                       {link.label}
                       <span aria-hidden="true">→</span>
                     </Link>

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useImperativeHandle, useRef, type Ref } from "react";
-import { preload } from "react-dom";
 import { Flowmap, Mesh, Program, Renderer, Texture, Triangle, Vec2, Vec3 } from "ogl";
 import styles from "./LiquidPhoto.module.css";
 
@@ -78,7 +77,7 @@ function drawStatic(canvas: HTMLCanvasElement, source: Source, w: number, h: num
   const ch = Math.round(h * dpr);
   canvas.width = cw;
   canvas.height = ch;
-  const ctx = canvas.getContext("2d");
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
   if (!ctx) return;
   const [iw, ih] = sourceSize(source);
   const scale = Math.max(cw / iw, ch / ih);
@@ -101,8 +100,6 @@ function drawStatic(canvas: HTMLCanvasElement, source: Source, w: number, h: num
 export default function LiquidPhoto({ src, alt, ref }: Props) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const engineRef = useRef({ revealStart: null as number | null, kick: () => {} });
-
-  preload(src, { as: "image", fetchPriority: "high" });
 
   useImperativeHandle(
     ref,
