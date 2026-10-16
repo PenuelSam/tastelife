@@ -1,19 +1,19 @@
-import Link from "next/link";
 import MobileMenu from "./MobileMenu";
+import { TransitionLink } from "./PageTransition";
 import styles from "./Nav.module.css";
 
 export default function Nav() {
   return (
     <nav className={styles.nav} aria-label="Main" data-site-nav>
-      <Link href="/" className={styles.initials}>
+      <TransitionLink href="/" className={styles.initials}>
         tastelife
-      </Link>
+      </TransitionLink>
       <ul className={styles.links}>
         <li>
-          <Link href="/talent">Work</Link>
+          <TransitionLink href="/talent">Work</TransitionLink>
         </li>
         <li>
-          <Link href="/about">About</Link>
+          <TransitionLink href="/about">About</TransitionLink>
         </li>
         <li>
           <a href="mailto:[email]">Contact</a>

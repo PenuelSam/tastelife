@@ -84,6 +84,8 @@ function createEngine(): Engine | null {
   };
   resize();
   window.addEventListener("resize", resize);
+  // Compile the shader now (progress 0 draws nothing) so the first click doesn't stall.
+  draw();
 
   return {
     play(mode, onDone) {
