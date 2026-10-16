@@ -1,26 +1,59 @@
-@import "tailwindcss";
-
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --red: #d9261c;
+  --deep-red: #b81f17;
+  --maroon: #6e0f14;
+  --cream: #f3eadb;
+  --paper: #f7efe6;
+
+  --nav-h: 60px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@media (min-width: 768px) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --nav-h: 80px;
   }
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--red);
+  color: var(--cream);
+  font-family: var(--font-body), sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Homepage intro: keep the hero and nav hidden until GSAP sets their start
+   states, so nothing flashes before the intro. Reduced motion skips this. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-home-intro],
+  body:has([data-home-intro]) [data-site-nav] {
+    visibility: hidden;
+  }
 }

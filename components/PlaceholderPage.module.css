@@ -1,0 +1,24 @@
+.main {
+  padding: 48px 16px;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display), sans-serif;
+  font-weight: 400;
+  font-size: clamp(48px, 14vw, 160px);
+  line-height: 0.9;
+  text-transform: uppercase;
+  overflow-wrap: break-word;
+}
+
+.note {
+  margin: 24px 0 0;
+  font-size: 15px;
+}
+
+@media (min-width: 768px) {
+  .main {
+    padding: 80px 40px;
+  }
+}

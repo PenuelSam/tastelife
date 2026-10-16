@@ -1,0 +1,220 @@
+.hero {
+  padding: 28px clamp(16px, 4vw, 56px) 48px;
+  font-family: var(--font-display), sans-serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  color: var(--cream);
+}
+
+.inner {
+  width: 100%;
+  /* 592px PORT/FOLIO + 20px gap + 336px frame at full width. */
+  max-width: 948px;
+  margin: 0 auto;
+}
+
+/* TASTE ▬▬▬ LIFE */
+.topRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 0;
+  font-size: clamp(18px, 2.2vw, 30px);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.word {
+  letter-spacing: 0.01em;
+}
+
+.bar {
+  flex: 1 1 0;
+  min-width: 0;
+  height: clamp(14px, 1.8vw, 24px);
+  background: var(--cream);
+}
+
+/* Everything below the top row; collapses to 0 height during the loader. */
+.stage {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.stageInner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 20px;
+  padding-top: 14px;
+}
+
+/* PORT / FOLIO */
+.portfolio {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 1.4vw, 18px);
+  /* Takes all spare width beside the right column; wraps below ~595px. */
+  flex: 1000 1 380px;
+  aspect-ratio: 16 / 15;
+  min-height: 340px;
+  /* min-height + aspect-ratio would force 363px of width on small screens. */
+  max-width: 100%;
+  margin: 0;
+  font: inherit;
+}
+
+.wordSvg {
+  display: block;
+  flex: 1 1 0;
+  width: 100%;
+  min-height: 0;
+  overflow: hidden;
+  fill: var(--cream);
+}
+
+.letter {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+/* Photo frame + names */
+.right {
+  display: flex;
+  /* Narrows faster than the row so the 4:5 frame + names never pass FOLIO's bottom
+     (336px at full width, ~197px at 600px); full width once wrapped. */
+  flex: 1 1 calc(40% - 43px);
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 29px;
+}
+
+/* Portrait 4:5, borders included. */
+.frame {
+  position: relative;
+  box-sizing: border-box;
+  aspect-ratio: 4 / 5;
+  border: calc(clamp(14px, 1.8vw, 24px) + 10px) solid var(--cream);
+  background: var(--deep-red);
+}
+
+.names {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: calc(clamp(26px, 3vw, 40px) + 10px);
+  line-height: 1;
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.mask {
+  display: block;
+  overflow: hidden;
+}
+
+.maskInner {
+  display: block;
+}
+
+/* ENTER bar */
+.enter {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  height: calc(clamp(18px, 2.2vw, 30px) + 20px);
+  min-height: 44px;
+  overflow: hidden;
+  background: var(--cream);
+  color: var(--red);
+  font-size: clamp(22px, 2.3vw, 32px);
+  letter-spacing: 0.04em;
+  transition: background-color 0.25s ease;
+}
+
+.enter:hover,
+.enter:focus-visible {
+  background: #fff;
+}
+
+.enter:focus-visible {
+  outline: 3px solid var(--cream);
+  outline-offset: 3px;
+}
+
+.label {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  line-height: 1.1;
+}
+
+.labelInner {
+  display: flex;
+  align-items: center;
+  gap: 0.35em;
+}
+
+.arrowHover {
+  display: inline-flex;
+  transition: transform 0.25s ease;
+}
+
+.enter:hover .arrowHover,
+.enter:focus-visible .arrowHover {
+  transform: translateX(6px);
+}
+
+.arrow {
+  display: block;
+  width: 1.1em;
+  height: 0.7em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: square;
+}
+
+/* Soft white band swept across the bar by the attention loop. */
+.sheen {
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: 0;
+  width: 22%;
+  background: #fff;
+  opacity: 0;
+  filter: blur(10px);
+  transform: skewX(-20deg);
+  pointer-events: none;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enter,
+  .arrowHover {
+    transition: none;
+  }
+
+  .enter:hover .arrowHover,
+  .enter:focus-visible .arrowHover {
+    transform: none;
+  }
+}
