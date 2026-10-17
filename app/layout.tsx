@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Anton, Archivo, Pinyon_Script } from "next/font/google";
-import Nav from "@/components/Nav";
 import { PageTransitionProvider } from "@/components/PageTransition";
 import SmoothScroll from "@/components/SmoothScroll";
 import "./globals.css";
@@ -38,7 +37,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body suppressHydrationWarning>
         <SmoothScroll>
           <PageTransitionProvider>
-            <Nav />
             {children}
           </PageTransitionProvider>
         </SmoothScroll>

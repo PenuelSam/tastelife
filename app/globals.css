@@ -4,13 +4,21 @@
   --maroon: #6e0f14;
   --cream: #f3eadb;
   --paper: #f7efe6;
+  --sand: #e2d0bc;
 
   --nav-h: 60px;
+
+  /* Rounded corners: /work and the lane pages only. Buttons, bars, dividers
+     and the homepage stay square. */
+  --radius-frame: 12px;
+  --radius-media: 8px;
+  --radius-polaroid: 10px;
 }
 
 @media (min-width: 768px) {
   :root {
     --nav-h: 80px;
+    --radius-frame: 16px;
   }
 }
 
@@ -39,6 +47,15 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+/* Red is a background only on the homepage. Pages that mark their <main>
+   data-theme="paper" get paper behind everything (incl. the shared nav) and
+   red accent text. Only the visible page counts: Next keeps pages you've left
+   mounted but hidden (display: none), and those must not set the colour. */
+body:has(main[data-theme="paper"]:not([style*="display: none"])) {
+  background: var(--paper);
+  color: var(--deep-red);
 }
 
 img,

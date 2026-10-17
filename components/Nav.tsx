@@ -15,9 +15,6 @@ export default function Nav() {
         <li>
           <TransitionLink href="/about">About</TransitionLink>
         </li>
-        <li>
-          <a href="mailto:[email]">Contact</a>
-        </li>
       </ul>
       <MobileMenu />
     </nav>

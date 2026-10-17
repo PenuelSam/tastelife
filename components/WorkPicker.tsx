@@ -28,9 +28,9 @@ const clamp = (v: number, max: number) => Math.max(-max, Math.min(max, v));
 // 20 stacked copies, 0.7px apart (0 to -13.3px), make the line icon look solid.
 const LAYERS = 20;
 const LAYER_GAP = 0.7;
-const FRONT = "#F7F0E4";
-const BACK_NEAR: [number, number, number] = [222, 208, 186];
-const BACK_FAR: [number, number, number] = [196, 180, 156];
+const FRONT = "#D9261C";
+const BACK_NEAR: [number, number, number] = [176, 28, 22];
+const BACK_FAR: [number, number, number] = [104, 12, 16];
 
 function layerColor(i: number): string {
   if (i === 0) return FRONT;
@@ -195,14 +195,9 @@ export default function WorkPicker() {
   };
 
   return (
-    <main ref={rootRef} className={styles.page}>
+    <main ref={rootRef} className={styles.page} data-theme="paper">
       <div className={styles.inner}>
         <div className={styles.heading}>
-          <p className={styles.stepRow}>
-            <span>Step 01</span>
-            <span className={styles.bar} aria-hidden="true" />
-            <span>Pick a lane</span>
-          </p>
           <h1 className={styles.title}>Three sides of me</h1>
         </div>
 

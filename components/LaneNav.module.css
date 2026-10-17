@@ -1,0 +1,45 @@
+/* Same type as the shared nav. */
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 24px;
+  font-family: var(--font-body), sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.backShort {
+  display: none;
+}
+
+.links {
+  display: flex;
+  gap: 32px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (max-width: 767px) {
+  .links,
+  .backLong {
+    display: none;
+  }
+
+  .backShort {
+    display: inline;
+  }
+
+  /* 44px tap area without changing the 24px row. */
+  .left {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin: -10px 0;
+  }
+}

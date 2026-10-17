@@ -1,5 +1,10 @@
-import PlaceholderPage from "@/components/PlaceholderPage";
+import type { Metadata } from "next";
+import LanePage from "@/components/lane/LanePage";
 
-export default function StylingPage() {
-  return <PlaceholderPage title="Styling" />;
+export const metadata: Metadata = {
+  title: "Styling — Taiwo Adeoshun",
+};
+
+export default function Page() {
+  return <LanePage slug="styling" />;
 }

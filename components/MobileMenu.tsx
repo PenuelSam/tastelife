@@ -185,25 +185,14 @@ export default function MobileMenu() {
     }
   };
 
-  const bigRow = (num: string, label: string, href: string, isPage: boolean) => {
-    const content = (
-      <>
-        <span className={styles.mask}>
-          <span className={styles.wordInner}>{label}</span>
-        </span>
-        <span className={styles.num}>{num}</span>
-      </>
-    );
-    return isPage ? (
-      <Link href={href} className={styles.row} onClick={goTo(href)}>
-        {content}
-      </Link>
-    ) : (
-      <a href={href} className={styles.row} onClick={close}>
-        {content}
-      </a>
-    );
-  };
+  const bigRow = (num: string, label: string, href: string) => (
+    <Link href={href} className={styles.row} onClick={goTo(href)}>
+      <span className={styles.mask}>
+        <span className={styles.wordInner}>{label}</span>
+      </span>
+      <span className={styles.num}>{num}</span>
+    </Link>
+  );
 
   return (
     <>
@@ -246,7 +235,7 @@ export default function MobileMenu() {
             </div>
 
             <nav className={styles.list} aria-label="Site">
-              {bigRow("01", "Work", "/work", true)}
+              {bigRow("01", "Work", "/work")}
               <ul className={`${styles.sub} ${styles.fade}`}>
                 {WORK_LINKS.map((link) => (
                   <li key={link.href}>
@@ -257,8 +246,7 @@ export default function MobileMenu() {
                   </li>
                 ))}
               </ul>
-              {bigRow("02", "About", "/about", true)}
-              {bigRow("03", "Contact", `mailto:${EMAIL}`, false)}
+              {bigRow("02", "About", "/about")}
             </nav>
 
             <div className={`${styles.bottom} ${styles.fade}`}>
