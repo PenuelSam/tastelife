@@ -62,7 +62,9 @@ svg {
 
 @media (prefers-reduced-motion: no-preference) {
   [data-home-intro],
-  body:has([data-home-intro]) [data-site-nav] {
+  body:has([data-home-intro]) [data-site-nav],
+  [data-about-intro] nav,
+  [data-about-intro] [data-intro] {
     visibility: hidden;
   }
 }

@@ -81,7 +81,7 @@ export default function AboutBio({ paragraphs }: { paragraphs: string[] }) {
 
   if (rest.length === 0) {
     return (
-      <div className={styles.bio}>
+      <div className={styles.bio} data-intro="text">
         <p>{first}</p>
       </div>
     );
@@ -90,7 +90,7 @@ export default function AboutBio({ paragraphs }: { paragraphs: string[] }) {
   const last = rest.length - 1;
 
   return (
-    <div className={styles.bio}>
+    <div className={styles.bio} data-intro="text">
       <p>
         {first}{" "}
         <button

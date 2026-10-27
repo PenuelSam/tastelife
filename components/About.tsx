@@ -1,7 +1,6 @@
-import { existsSync } from "node:fs";
-import path from "node:path";
 import AboutBio from "./AboutBio";
 import AboutCutout from "./AboutCutout";
+import AboutIntro from "./AboutIntro";
 import FitText from "./FitText";
 import LaneNav from "./LaneNav";
 import styles from "./About.module.css";
@@ -25,48 +24,46 @@ const AVAILABLE_FOR = [
   "Creative Collaborations",
 ];
 
-const CUTOUT_SRC = "/about-cutout.png";
+const CUTOUT_SRC = "/images/about-cutout.png";
 
 export default function About() {
-  const hasCutout = existsSync(path.join(process.cwd(), "public", CUTOUT_SRC));
-
   return (
-    <main className={styles.frame} data-theme="paper">
+    <AboutIntro className={styles.frame}>
       <div className={styles.panel}>
         <LaneNav left="home" className={styles.nav} />
 
         <div className={styles.grid}>
           <div className={styles.left}>
-            <h1 className={styles.title}>
+            <h1 className={styles.title} data-intro="title">
               <span className={styles.titleText}>About me</span>
               <FitText text="ABOUT ME" className={styles.titleFit} />
             </h1>
-            <AboutCutout src={hasCutout ? CUTOUT_SRC : null} alt="Taiwo Adeoshun" />
+            <AboutCutout src={CUTOUT_SRC} alt="Taiwo Adeoshun" />
           </div>
 
           <div className={styles.right}>
             <h2 className={styles.name}>
-              <span className={styles.firstName}>Featuring</span>{" "}
-              <span className={styles.surname}>Tastelife</span>
+              <span className={styles.firstName} data-intro="script">Featuring</span>{" "}
+              <span className={styles.surname} data-intro="name">Tastelife</span>
             </h2>
             <AboutBio paragraphs={BIO} />
-            <p className={styles.expertiseLabel}>Available for:</p>
-            <ul className={styles.expertise}>
+            <p className={styles.expertiseLabel} data-intro="text">Available for:</p>
+            <ul className={styles.expertise} data-intro="text">
               {AVAILABLE_FOR.map((item) => (
                 <li key={item}>{item}</li>
               ))}
             </ul>
             <div className={styles.buttons}>
-              <a className={`${styles.button} ${styles.solid}`} href={`mailto:${EMAIL}`}>
+              <a className={`${styles.button} ${styles.solid}`} data-intro="button" href={`mailto:${EMAIL}`}>
                 Get in touch
               </a>
-              <a className={`${styles.button} ${styles.outline}`} href={INSTAGRAM_URL}>
+              <a className={`${styles.button} ${styles.outline}`} data-intro="button" href={INSTAGRAM_URL}>
                 Instagram
               </a>
             </div>
           </div>
         </div>
       </div>
-    </main>
+    </AboutIntro>
   );
 }

@@ -79,33 +79,6 @@
   opacity: 1;
 }
 
-.cutoutPlaceholder {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-}
-
-.cutoutPlaceholder svg {
-  width: 100%;
-  min-height: 0;
-  flex: 0 1 auto;
-  max-height: calc(100% - 30px);
-  fill: rgb(110 15 20 / 0.12);
-}
-
-.cutoutLabel {
-  font-family: var(--font-body), sans-serif;
-  font-weight: 600;
-  font-size: 12px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  opacity: 0.6;
-}
-
 .right {
   max-width: 460px;
 }
