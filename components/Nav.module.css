@@ -17,7 +17,6 @@
 }
 
 @media (max-width: 767px) {
-  /* 44px tap area inside the 60px nav. */
   .initials {
     display: inline-flex;
     align-items: center;
@@ -26,7 +25,6 @@
 }
 
 .links {
-  /* Below 768px the MENU button replaces these. */
   display: none;
   gap: 20px;
   margin: 0;

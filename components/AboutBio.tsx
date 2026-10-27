@@ -9,12 +9,6 @@ gsap.registerPlugin(useGSAP);
 
 const DESKTOP = "(min-width: 768px)";
 
-/**
- * Desktop: the two columns are centred in their row, so a taller bio would push
- * ABOUT ME down and the heading up. Before opening, pin both columns where they
- * are (top-aligned with a margin), so ABOUT ME stays put and the bio column only
- * rises as far as the top of ABOUT ME, then grows downward.
- */
 function pinColumns(more: HTMLElement) {
   const right = more.closest<HTMLElement>(`.${styles.right}`);
   const left = right?.previousElementSibling as HTMLElement | null;
@@ -28,11 +22,6 @@ function pinColumns(more: HTMLElement) {
   return { left, right, leftTop, rightTop };
 }
 
-/**
- * The bio, truncated to its first paragraph. "Read more" sits right after its
- * last word and smoothly opens the rest; "Read less", after the last word of
- * the bio, closes it again. Reduced motion: instant.
- */
 export default function AboutBio({ paragraphs }: { paragraphs: string[] }) {
   const [first, ...rest] = paragraphs;
   const [open, setOpen] = useState(false);
@@ -47,7 +36,6 @@ export default function AboutBio({ paragraphs }: { paragraphs: string[] }) {
     () => {
       const more = moreRef.current;
       if (!more) return;
-      // Only animate real toggles (not the first render, or StrictMode's re-run of it).
       if (wasOpen.current === open) return;
       wasOpen.current = open;
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -56,7 +44,6 @@ export default function AboutBio({ paragraphs }: { paragraphs: string[] }) {
 
       if (open) {
         const duration = reduced ? 0 : 0.8;
-        // Pin once per open/close cycle; re-opening mid-close keeps the existing pin.
         pinned.current ??= pinColumns(more);
         const pin = pinned.current;
         const full = more.scrollHeight;
@@ -65,7 +52,6 @@ export default function AboutBio({ paragraphs }: { paragraphs: string[] }) {
           { height: more.offsetHeight },
           { height: full, duration, ease: "power2.inOut", onComplete: () => void gsap.set(more, { height: "auto" }) }
         );
-        // Rise by half the growth (as if still centred), but never above ABOUT ME.
         if (pin) {
           gsap.killTweensOf(pin.right);
           gsap.to(pin.right, { marginTop: Math.max(pin.leftTop, pin.rightTop - full / 2), duration, ease: "power2.inOut" });
@@ -76,13 +62,11 @@ export default function AboutBio({ paragraphs }: { paragraphs: string[] }) {
       } else {
         const duration = reduced ? 0 : 0.7;
         const pin = pinned.current;
-        // Back to the stylesheet's centring, which matches the pinned closed position.
         const unpin = () => {
           if (pin) gsap.set([pin.left, pin.right], { clearProps: "alignSelf,marginTop" });
           pinned.current = null;
         };
         gsap.to(lines, { opacity: 0, duration: reduced ? 0 : 0.3, ease: "power1.out" });
-        // One timeline, so the unpin runs after the last frame of both tweens.
         const tl = gsap.timeline({ onComplete: unpin });
         tl.fromTo(more, { height: more.offsetHeight }, { height: 0, duration, ease: "power2.inOut" }, 0);
         if (pin) {
@@ -109,7 +93,6 @@ export default function AboutBio({ paragraphs }: { paragraphs: string[] }) {
     <div className={styles.bio}>
       <p>
         {first}{" "}
-        {/* Stays in place (just invisible) while open, so the paragraph never reflows. */}
         <button
           ref={moreButtonRef}
           type="button"
@@ -123,7 +106,6 @@ export default function AboutBio({ paragraphs }: { paragraphs: string[] }) {
           Read more
         </button>
       </p>
-      {/* Collapsed by default; inert while closed so it isn't read or focused. */}
       <div ref={moreRef} id={id} className={styles.bioMore} inert={!open}>
         {rest.map((paragraph, i) => (
           <p key={paragraph.slice(0, 24)}>

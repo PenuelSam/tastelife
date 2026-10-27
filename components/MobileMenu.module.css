@@ -1,4 +1,3 @@
-/* MENU / CLOSE: identical box and type so the top bar doesn't jump on open. */
 .toggle {
   display: inline-flex;
   align-items: center;
@@ -51,7 +50,6 @@
   clip-path: inset(0% 0% 100% 0%);
 }
 
-/* Same 24px row as the 60px nav's centre line (18 + 12 = 30). */
 .top {
   display: flex;
   flex-shrink: 0;

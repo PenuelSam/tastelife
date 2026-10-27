@@ -10,7 +10,6 @@ const SIZES: Record<Variant, string> = {
   thumb: "60px",
 };
 
-/** The comp card drawn as a white card with a red border. */
 export function CompCard({ large = false }: { large?: boolean }) {
   return (
     <span className={`${styles.compCard} ${large ? styles.compCardLarge : ""}`}>
@@ -24,7 +23,6 @@ export function CompCard({ large = false }: { large?: boolean }) {
   );
 }
 
-/** Media that fills its (aspect-ratio) box: image, video poster, card or placeholder. */
 export default function LaneMedia({ item, variant, eager = false }: { item: LaneItem; variant: Variant; eager?: boolean }) {
   if (item.kind === "card") return variant === "thumb" ? <span className={styles.thumbCard}>CC</span> : <CompCard />;
 

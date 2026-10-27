@@ -1,4 +1,3 @@
-/* Full-bleed paper page, like /work. */
 .frame {
   display: flex;
   min-height: 100vh;
@@ -23,7 +22,6 @@
   display: grid;
   flex: 1;
   grid-template-columns: 1fr 1fr;
-  /* One row filling the screen: opening the bio never changes its height. */
   grid-template-rows: 1fr;
   align-items: center;
   gap: clamp(24px, 4vw, 64px);
@@ -33,7 +31,6 @@
   padding-top: 24px;
 }
 
-/* ---------- Left: ABOUT ME with the cutout over its lower half ---------- */
 .left {
   --title-size: clamp(96px, 11vw, 168px);
   position: relative;
@@ -74,7 +71,6 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  /* Anchored to the top so the head overlaps the letters whatever the image's proportions. */
   object-position: 50% 0;
   opacity: 0;
 }
@@ -83,7 +79,6 @@
   opacity: 1;
 }
 
-/* Silhouette from the top of the area, label right under it. */
 .cutoutPlaceholder {
   position: absolute;
   inset: 0;
@@ -111,7 +106,6 @@
   opacity: 0.6;
 }
 
-/* ---------- Right: name, bio, expertise, buttons ---------- */
 .right {
   max-width: 460px;
 }
@@ -152,12 +146,10 @@
   margin-bottom: 0;
 }
 
-/* The always-visible first paragraph; the hidden section carries the spacing. */
 .bio > p {
   margin: 0;
 }
 
-/* Paragraphs 2–4, collapsed until "Read more". */
 .bioMore {
   height: 0;
   overflow: hidden;
@@ -167,7 +159,6 @@
   padding-top: 1em;
 }
 
-/* Inline text right after the last word. */
 .readMore {
   position: relative;
   display: inline;
@@ -185,7 +176,6 @@
   transition: opacity 0.3s ease;
 }
 
-/* A bigger tap area that doesn't make the line any taller. */
 .readMore::after {
   content: "";
   position: absolute;
@@ -201,7 +191,6 @@
   outline-offset: 3px;
 }
 
-/* Fades out, then leaves the tab order; coming back it's visible (and focusable) at once. */
 .readMore[data-hidden] {
   opacity: 0;
   visibility: hidden;
@@ -223,7 +212,6 @@
   font-size: 15px;
 }
 
-/* Fashion Design • Styling • … wrapping as one line. */
 .expertise {
   display: flex;
   flex-wrap: wrap;
@@ -289,7 +277,6 @@
     padding-top: 0;
   }
 
-  /* ABOUT ME spans the panel; a 470px area below holds the cutout. */
   .left {
     min-height: 0;
     padding-bottom: 470px;

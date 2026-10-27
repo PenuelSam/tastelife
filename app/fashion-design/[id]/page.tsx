@@ -4,14 +4,10 @@ import { notFound } from "next/navigation";
 import LanePage from "@/components/lane/LanePage";
 import { lanes, visibleItems } from "@/data/lanes";
 
-// Shareable /fashion-design/<id>: the lane page with that item's detail view open.
-// LanePage reads the id from the URL itself; params are only needed to 404.
 const lane = lanes["fashion-design"];
 const items = visibleItems(lane);
 
 export function generateStaticParams() {
-  // Cache Components needs at least one param; with no media yet, a placeholder
-  // id (which 404s below) stands in until the lane has visible items.
   return items.length ? items.map((item) => ({ id: item.id })) : [{ id: "__placeholder__" }];
 }
 

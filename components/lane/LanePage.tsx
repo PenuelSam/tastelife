@@ -20,14 +20,9 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 const REDUCED = "(prefers-reduced-motion: reduce)";
 const MOBILE = "(max-width: 767px)";
 
-/**
- * The scatter gallery. Memoized so opening and closing a piece (which only
- * changes the URL) never re-renders it.
- */
 const Gallery = memo(function Gallery({ items, onOpen }: { items: LaneItem[]; onOpen: (id: string) => void }) {
   const listRef = useRef<HTMLUListElement>(null);
 
-  // Per-item parallax, from one rAF-throttled scroll handler.
   useEffect(() => {
     const list = listRef.current;
     if (!list || window.matchMedia(REDUCED).matches) return;
@@ -41,7 +36,7 @@ const Gallery = memo(function Gallery({ items, onOpen }: { items: LaneItem[]; on
       const factor = mobile.matches ? 0.5 : 1;
       for (const slot of slots) {
         const r = slot.getBoundingClientRect();
-        if (r.bottom < -200 || r.top > vh + 200) continue; // only items near the viewport
+        if (r.bottom < -200 || r.top > vh + 200) continue;
         const offset = r.top + r.height / 2 - vh / 2;
         const inner = slot.firstElementChild as HTMLElement;
         inner.style.transform = `translate3d(0, ${(-offset * Number(slot.dataset.speed) * factor).toFixed(1)}px, 0)`;
@@ -62,7 +57,6 @@ const Gallery = memo(function Gallery({ items, onOpen }: { items: LaneItem[]; on
     };
   }, []);
 
-  // Scroll reveal: clear each item once 12% of it is visible.
   useEffect(() => {
     const list = listRef.current;
     if (!list) return;
@@ -83,11 +77,9 @@ const Gallery = memo(function Gallery({ items, onOpen }: { items: LaneItem[]; on
   return (
     <ul ref={listRef} className={styles.scatter}>
       {items.map((item, i) => {
-        // The 14-slot layout repeats for longer lanes.
         const slot = i % DESKTOP_SLOTS.length;
         const d = DESKTOP_SLOTS[slot];
         const m = MOBILE_SLOTS[slot];
-        // Landscape frames keep their own shape (and a wider column) instead of a portrait crop.
         const landscape = item.kind !== "card" && ratio(item.aspect) > 1;
         const vars = {
           "--col": landscape ? widen(d.col, 4) : d.col,
@@ -121,7 +113,6 @@ const Gallery = memo(function Gallery({ items, onOpen }: { items: LaneItem[]; on
   );
 });
 
-/** Exhibition-style lane page shared by /fashion-design, /styling and /modeling. */
 export default function LanePage({ slug }: { slug: LaneSlug }) {
   const lane = lanes[slug];
   const items = useMemo(() => visibleItems(lanes[slug]), [slug]);
@@ -130,17 +121,14 @@ export default function LanePage({ slug }: { slug: LaneSlug }) {
   const bandRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const sheetRef = useRef<HTMLDivElement>(null);
-  // True when this page opened the detail with pushState, so closing can go Back.
   const pushedRef = useRef(false);
   const lastOpenRef = useRef<string | null>(null);
 
-  // The open item comes from the URL: /<slug>/<id> (shallow, via the History API).
   const openId = pathname.split("/")[2] ?? null;
   const openIndex = openId ? items.findIndex((item) => item.id === openId) : -1;
 
   const open = useCallback(
     (id: string) => {
-      // Start loading a film inside the click, before the detail view renders.
       const item = items.find((i) => i.id === id);
       if (item) primeDetailVideo(item);
       window.history.pushState(null, "", `/${slug}/${id}`);
@@ -149,13 +137,11 @@ export default function LanePage({ slug }: { slug: LaneSlug }) {
     [items, slug]
   );
   const show = (index: number) => window.history.replaceState(null, "", `/${slug}/${items[index].id}`);
-  // Called by the detail view once its fly-back animation has finished.
   const close = () => {
     if (pushedRef.current) window.history.back();
     else window.history.replaceState(null, "", `/${slug}`);
   };
 
-  // After closing, return focus to the tile of the piece that was showing (without scrolling).
   useEffect(() => {
     if (openIndex >= 0) {
       lastOpenRef.current = items[openIndex].id;
@@ -167,8 +153,6 @@ export default function LanePage({ slug }: { slug: LaneSlug }) {
     if (id) document.querySelector<HTMLElement>(`[data-item-id="${id}"]`)?.focus({ preventScroll: true });
   }, [openIndex, items]);
 
-  // As the gallery slides over the pinned band, the title shrinks and fades.
-  // Scrubbed over the band's own height (it starts at the top of the page).
   useGSAP(
     () => {
       const band = bandRef.current;
@@ -188,7 +172,6 @@ export default function LanePage({ slug }: { slug: LaneSlug }) {
     { scope: bandRef }
   );
 
-  // Mobile band: 250px with a two-line 64px title, 200px with a one-line 72px title.
   const twoLines = lane.titleLines.length > 1;
   const bandVars = {
     "--band-h-mobile": twoLines ? "250px" : "200px",

@@ -31,14 +31,12 @@ const WORK_LINKS = [
 ];
 
 const DESKTOP_QUERY = "(min-width: 768px)";
-// Closing replays the open timeline backwards at this speed (~0.4s).
 const CLOSE_SPEED = 3.2;
 
 const noopSubscribe = () => () => {};
 const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 export default function MobileMenu() {
-  // The overlay is portalled to <body>, which only exists on the client.
   const isClient = useSyncExternalStore(noopSubscribe, () => true, () => false);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -55,7 +53,6 @@ export default function MobileMenu() {
   const skipFocusReturnRef = useRef(false);
   const wasOpenRef = useRef(false);
 
-  // Close on route change.
   if (pathname !== lastPathname) {
     setLastPathname(pathname);
     setOpen(false);
@@ -94,7 +91,6 @@ export default function MobileMenu() {
     { dependencies: [isClient], scope: overlayRef }
   );
 
-  // Play the open/close animation, lock scrolling and move focus.
   useEffect(() => {
     const overlay = overlayRef.current;
     const tl = timelineRef.current;
@@ -124,11 +120,9 @@ export default function MobileMenu() {
     skipFocusReturnRef.current = false;
     document.documentElement.style.overflow = "";
     lenis?.current?.start();
-    // `inert` has already dropped focus from the overlay by now.
     if (returnFocus) menuButtonRef.current?.focus({ preventScroll: true });
   }, [open, lenis]);
 
-  // Release the scroll lock if the nav unmounts while open.
   useEffect(
     () => () => {
       document.documentElement.style.overflow = "";
@@ -137,13 +131,11 @@ export default function MobileMenu() {
     [lenis]
   );
 
-  // Close instantly when the window grows into the desktop layout.
   useEffect(() => {
     const query = window.matchMedia(DESKTOP_QUERY);
     const onChange = () => {
       if (!query.matches) return;
       instantCloseRef.current = true;
-      // The MENU button is hidden on desktop, so there's nowhere to return focus.
       skipFocusReturnRef.current = true;
       setOpen(false);
     };
@@ -153,8 +145,6 @@ export default function MobileMenu() {
 
   const close = () => setOpen(false);
 
-  // Page links go through the liquid transition: it pours over the open menu,
-  // and the route change closes the menu instantly underneath the full cover.
   const goTo = (href: string) => (e: MouseEvent<HTMLAnchorElement>) => {
     if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     e.preventDefault();

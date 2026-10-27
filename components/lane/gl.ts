@@ -1,5 +1,3 @@
-/** Shared bits for the lane page's WebGL effects. */
-
 export function hasWebGL(): boolean {
   try {
     const c = document.createElement("canvas");
@@ -13,10 +11,9 @@ export function hasWebGL(): boolean {
 
 export const prefersReducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-/** Desktop with a real mouse. */
 export const hasFinePointer = () => window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
-export const fullscreenVertex = /* glsl */ `
+export const fullscreenVertex = `
   attribute vec2 uv;
   attribute vec2 position;
   varying vec2 vUv;
@@ -27,8 +24,7 @@ export const fullscreenVertex = /* glsl */ `
   }
 `;
 
-/** 2D simplex noise (Ashima Arts / Stefan Gustavson, MIT) and a 4-octave fbm. */
-export const noiseGLSL = /* glsl */ `
+export const noiseGLSL = `
   vec3 permute(vec3 x) { return mod(((x * 34.0) + 1.0) * x, 289.0); }
 
   float snoise(vec2 v) {

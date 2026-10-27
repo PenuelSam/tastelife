@@ -25,11 +25,9 @@ const AVAILABLE_FOR = [
   "Creative Collaborations",
 ];
 
-// Drop a transparent PNG here to replace the placeholder silhouette.
 const CUTOUT_SRC = "/about-cutout.png";
 
 export default function About() {
-  // Only request the cutout once the file exists, so there's no 404 until then.
   const hasCutout = existsSync(path.join(process.cwd(), "public", CUTOUT_SRC));
 
   return (
@@ -41,7 +39,6 @@ export default function About() {
           <div className={styles.left}>
             <h1 className={styles.title}>
               <span className={styles.titleText}>About me</span>
-              {/* Mobile: the same words measured to span the panel exactly. */}
               <FitText text="ABOUT ME" className={styles.titleFit} />
             </h1>
             <AboutCutout src={hasCutout ? CUTOUT_SRC : null} alt="Taiwo Adeoshun" />

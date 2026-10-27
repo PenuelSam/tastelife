@@ -1,9 +1,7 @@
 import { Fragment } from "react";
 
-// "@name" (letters, digits, dots, underscores), not counting a sentence's final full stop.
 const HANDLE = /@([A-Za-z0-9._]*[A-Za-z0-9_])/g;
 
-/** Text with every @handle linked to its Instagram profile. */
 export default function Handles({ text, className }: { text: string; className?: string }) {
   const parts: React.ReactNode[] = [];
   let last = 0;

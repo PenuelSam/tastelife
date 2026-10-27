@@ -2,14 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 
-// Measurement font size; the viewBox makes the result scale-free.
 const SIZE = 200;
 
-/**
- * One line of text drawn as an SVG whose viewBox is the text's measured ink box,
- * so at width: 100% the letters span the container exactly.
- * Decorative: put the real text elsewhere for screen readers.
- */
 export default function FitText({ text, className }: { text: string; className?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
   const [viewBox, setViewBox] = useState<string | null>(null);

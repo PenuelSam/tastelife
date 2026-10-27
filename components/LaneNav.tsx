@@ -3,12 +3,10 @@ import { TransitionLink } from "./PageTransition";
 import styles from "./LaneNav.module.css";
 
 type Props = {
-  /** "back" shows ← All work / ← Work; "home" shows the initials. */
   left?: "back" | "home";
   className?: string;
 };
 
-/** In-page nav for pages that draw their own header (lane pages, About). Inherits text color. */
 export default function LaneNav({ left = "back", className }: Props) {
   return (
     <nav className={className ? `${styles.nav} ${className}` : styles.nav} aria-label="Main">

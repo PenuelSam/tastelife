@@ -88,7 +88,6 @@
   }
 }
 
-/* float (up/down) > tilt (cursor) > spin (hover) > layers */
 .float,
 .tilt,
 .spin,
@@ -101,7 +100,6 @@
   animation: float 4.2s ease-in-out infinite;
 }
 
-/* A third of a cycle apart, so the three never move together. */
 li:nth-child(2) .float {
   animation-delay: -1.4s;
 }
@@ -115,7 +113,6 @@ li:nth-child(3) .float {
   transition: transform 0.25s ease-out;
 }
 
-/* 56% of the square's outer width (the square's content box is 20px narrower). */
 .icon {
   position: relative;
   width: calc(var(--square) * var(--icon-ratio, 0.56));
@@ -152,7 +149,6 @@ li:nth-child(3) .float {
   }
 }
 
-/* Hover (or keyboard focus): lift, spin, dim the other lanes. */
 .lane:focus-visible {
   outline: none;
 }
@@ -206,14 +202,12 @@ li:nth-child(3) .float {
   }
 }
 
-/* Mobile-only parts, hidden on desktop. */
 .arrow,
 .labelBreak,
 .hintMobile {
   display: none;
 }
 
-/* ---------- Mobile (below 768px): vertical list of lane rows ---------- */
 @media (max-width: 767px) {
   .page {
     align-items: stretch;
@@ -224,7 +218,6 @@ li:nth-child(3) .float {
     gap: 20px;
   }
 
-  /* Heading and lanes centered together above the hint. */
   .heading {
     margin-top: auto;
   }
@@ -232,7 +225,6 @@ li:nth-child(3) .float {
   .title {
     font-size: 60px;
     line-height: 1.2;
-    /* Two even lines instead of a lone "me". */
     text-wrap: balance;
   }
 
@@ -297,7 +289,6 @@ li:nth-child(3) .float {
     transform: rotateX(var(--tilt-x, 14deg)) rotateY(var(--tilt-y, -24deg));
   }
 
-  /* Tap: quick spin and a small lift before the transition starts. */
   .lane[data-tapped] .square {
     transform: scale(1.04);
   }
@@ -339,7 +330,6 @@ li:nth-child(3) .float {
   }
 }
 
-/* Reduced motion on mobile: no float, spin or phone tilt; keep the resting tilt. */
 @media (max-width: 767px) and (prefers-reduced-motion: reduce) {
   .float,
   .lane[data-tapped] .spin {

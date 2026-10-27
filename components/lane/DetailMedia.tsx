@@ -16,12 +16,6 @@ gsap.registerPlugin(useGSAP);
 
 type Reveal = { progress: { value: number }; render: () => void; finish: () => void; destroy: () => void };
 
-/**
- * Liquid reveal over a loaded <img>: a canvas the same size as the image runs
- * the homepage photo reveal (without the duotone), then hands back to the img.
- * Each reveal gets a fresh canvas: a canvas whose context was lost (by an
- * earlier reveal's cleanup) can never get a working context again.
- */
 function createReveal(frame: HTMLElement, img: HTMLImageElement): Reveal | null {
   const w = img.offsetWidth;
   const h = img.offsetHeight;
@@ -30,7 +24,6 @@ function createReveal(frame: HTMLElement, img: HTMLImageElement): Reveal | null 
   canvas.className = styles.revealCanvas;
   canvas.setAttribute("aria-hidden", "true");
   frame.appendChild(canvas);
-  // Layout offsets, unaffected by the frame's curl transform.
   canvas.style.left = `${img.offsetLeft}px`;
   canvas.style.top = `${img.offsetTop}px`;
   canvas.style.width = `${w}px`;
@@ -90,14 +83,12 @@ function createReveal(frame: HTMLElement, img: HTMLImageElement): Reveal | null 
   };
 }
 
-/** Film in the detail view: muted, tap to play or pause. */
 function DetailVideo({ item }: { item: LaneItem }) {
   const hostRef = useRef<HTMLButtonElement>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
     const host = hostRef.current;
-    // Adopt the element the click started; on a direct link, start it now.
     const video = takeDetailVideo(item) ?? primeDetailVideo(item);
     if (!host || !video) return;
     videoRef.current = video;
@@ -137,11 +128,6 @@ function DetailVideo({ item }: { item: LaneItem }) {
   );
 }
 
-/**
- * Centre media for the detail view. Every time it mounts (open, Prev/Next,
- * filmstrip) one timeline runs the page-curl on the frame and, for photos,
- * the liquid reveal, starting together.
- */
 export default function DetailMedia({ item }: { item: LaneItem }) {
   const frameRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
@@ -192,7 +178,6 @@ export default function DetailMedia({ item }: { item: LaneItem }) {
         else {
           img.addEventListener("load", begin, { once: true });
           img.addEventListener("error", start, { once: true });
-          // Don't hold the curl back on a slow image; it then appears without the liquid.
           timer = window.setTimeout(start, 700);
         }
       } else {
@@ -227,7 +212,6 @@ export default function DetailMedia({ item }: { item: LaneItem }) {
   } else if (item.kind === "video") {
     media = <DetailVideo item={item} />;
   } else {
-    // width/height are only an initial box; CSS sizes it to the photo's own proportions.
     media = (
       <>
         <Image
@@ -253,7 +237,7 @@ export default function DetailMedia({ item }: { item: LaneItem }) {
   );
 }
 
-const revealFragment = /* glsl */ `
+const revealFragment = `
   precision highp float;
 
   uniform sampler2D tMap;
@@ -281,7 +265,6 @@ const revealFragment = /* glsl */ `
       texture2D(tMap, clamp(base - shift, 0.001, 0.999)).b
     );
 
-    // The photo rises from the bottom behind a soft wavy edge.
     float edgeWave = (sin(uv.x * 7.0 + t * 2.0) * 0.03 + sin(uv.x * 13.0 - t * 3.0) * 0.015) * (1.0 - p);
     float edge = mix(-0.09, 1.04, p) + edgeWave;
     float mask = 1.0 - smoothstep(edge - 0.035, edge, uv.y);

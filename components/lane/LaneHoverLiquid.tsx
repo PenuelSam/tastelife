@@ -8,12 +8,6 @@ import styles from "./LanePage.module.css";
 
 const HOVER_STRENGTH = 0.35;
 
-/**
- * Liquid ripple on hovered gallery images (desktop, fine pointer only).
- * One shared canvas moves into whichever [data-liquid] frame is hovered and
- * draws that frame's own <img> as a texture: animated fbm noise scaled by
- * uStrength, plus a flowmap so the ripple trails the cursor.
- */
 export default function LaneHoverLiquid({ rootRef }: { rootRef: RefObject<HTMLElement | null> }) {
   useEffect(() => {
     const root = rootRef.current;
@@ -30,7 +24,7 @@ export default function LaneHoverLiquid({ rootRef }: { rootRef: RefObject<HTMLEl
     try {
       flowmap = new Flowmap(gl, { falloff: 0.25, alpha: 0.6, dissipation: 0.93 });
     } catch {
-      flowmap = null; // no half-float render targets: noise only
+      flowmap = null;
     }
     const empty = new Texture(gl, { image: new Uint8Array([0, 0, 0, 255]), width: 1, height: 1, generateMipmaps: false });
 
@@ -59,7 +53,6 @@ export default function LaneHoverLiquid({ rootRef }: { rootRef: RefObject<HTMLEl
       raf = 0;
       if (!frame) return;
       velocity *= 0.94;
-      // Fully faded out and settled: hand the frame back to the plain <img>.
       if (!hovering && hover.value <= 0.001 && velocity < 0.01) {
         detach();
         return;
@@ -158,7 +151,7 @@ export default function LaneHoverLiquid({ rootRef }: { rootRef: RefObject<HTMLEl
   return null;
 }
 
-const fragment = /* glsl */ `
+const fragment = `
   precision highp float;
 
   uniform sampler2D tMap;
@@ -172,7 +165,6 @@ const fragment = /* glsl */ `
 
   ${noiseGLSL}
 
-  // object-fit: cover, matching the <img> underneath.
   vec2 cover(vec2 uv) {
     float canvasAspect = uResolution.x / uResolution.y;
     float imageAspect = uImageSize.x / uImageSize.y;

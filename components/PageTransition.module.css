@@ -1,4 +1,3 @@
-/* Full-screen liquid layer, above the mobile menu (z-index 100). */
 .canvas {
   position: fixed;
   inset: 0;

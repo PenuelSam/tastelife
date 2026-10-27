@@ -6,7 +6,6 @@ import "lenis/dist/lenis.css";
 
 const LenisContext = createContext<RefObject<Lenis | null> | null>(null);
 
-/** Ref to the active Lenis instance (null when reduced motion is on). */
 export function useLenis() {
   return useContext(LenisContext);
 }

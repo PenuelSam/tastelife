@@ -11,21 +11,18 @@ import {
 import { TransitionLink, usePageTransition } from "./PageTransition";
 import styles from "./WorkPicker.module.css";
 
-const MAX_TILT_Y = 27; // deg, left/right
-const MAX_TILT_X = 22; // deg, up/down
+const MAX_TILT_Y = 27;
+const MAX_TILT_X = 22;
 
 const MOBILE_QUERY = "(max-width: 767px)";
 const REDUCED_QUERY = "(prefers-reduced-motion: reduce)";
-// Mobile resting tilt (matches the CSS default) and the phone-tilt range on top of it.
 const REST_TILT_X = 14;
 const REST_TILT_Y = -24;
 const MAX_PHONE_TILT = 20;
-// Mobile tap: spin + lift for this long, then start the page transition.
 const TAP_MS = 550;
 
 const clamp = (v: number, max: number) => Math.max(-max, Math.min(max, v));
 
-// 20 stacked copies, 0.7px apart (0 to -13.3px), make the line icon look solid.
 const LAYERS = 20;
 const LAYER_GAP = 0.7;
 const FRONT = "#D9261C";
@@ -56,7 +53,6 @@ const ICONS: Record<string, ReactNode> = {
   ),
 };
 
-// `lines` stack on mobile (FASHION / DESIGN) and sit inline on desktop.
 const LANES = [
   { lines: ["Fashion", "design"], href: "/fashion-design", icon: "scissors" },
   { lines: ["Styling"], href: "/styling", icon: "hanger" },
@@ -85,7 +81,6 @@ export default function WorkPicker() {
   const timersRef = useRef<number[]>([]);
   const { navigate } = usePageTransition();
 
-  // Tilt every icon toward the cursor via CSS variables (no React state).
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
@@ -103,7 +98,6 @@ export default function WorkPicker() {
     return () => window.removeEventListener("mousemove", onMove);
   }, []);
 
-  // Mobile: tilt the icons gently with the phone, on top of the resting tilt.
   useEffect(() => {
     const root = rootRef.current;
     if (!root || typeof DeviceOrientationEvent === "undefined") return;
@@ -133,7 +127,6 @@ export default function WorkPicker() {
 
     const onOrientation = (e: DeviceOrientationEvent) => {
       if (e.beta === null || e.gamma === null) return;
-      // Treat however the phone is held at first as neutral.
       if (baseBeta === null) baseBeta = e.beta;
       target.x = clamp(-(e.beta - baseBeta), MAX_PHONE_TILT);
       target.y = clamp(e.gamma, MAX_PHONE_TILT);
@@ -141,7 +134,6 @@ export default function WorkPicker() {
     };
     const listen = () => window.addEventListener("deviceorientation", onOrientation);
 
-    // iOS needs permission, requested from a user gesture: the first tap anywhere.
     const permissionApi = DeviceOrientationEvent as unknown as {
       requestPermission?: () => Promise<"granted" | "denied">;
     };
@@ -174,8 +166,6 @@ export default function WorkPicker() {
     return () => timers.forEach((id) => window.clearTimeout(id));
   }, []);
 
-  // Mobile tap: spin the icon and lift the square, then start the transition.
-  // Desktop clicks fall through to TransitionLink.
   const onLaneClick = (href: string) => (e: ReactMouseEvent<HTMLAnchorElement>) => {
     if (!window.matchMedia(MOBILE_QUERY).matches) return;
     if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
@@ -189,7 +179,6 @@ export default function WorkPicker() {
     lane.setAttribute("data-tapped", "");
     timersRef.current.push(
       window.setTimeout(() => navigate(href), TAP_MS),
-      // Reset once the transition has covered the screen.
       window.setTimeout(() => lane.removeAttribute("data-tapped"), TAP_MS + 1600)
     );
   };

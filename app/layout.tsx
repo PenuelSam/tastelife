@@ -33,7 +33,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${anton.variable} ${pinyonScript.variable} ${archivo.variable}`}
     >
-      {/* Browser extensions (e.g. ColorZilla) add attributes to <body> before hydration. */}
       <body suppressHydrationWarning>
         <SmoothScroll>
           <PageTransitionProvider>

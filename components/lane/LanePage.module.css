@@ -8,7 +8,6 @@
   display: none;
 }
 
-/* ---------- Pinned title band ---------- */
 .band {
   position: sticky;
   top: 0;
@@ -83,7 +82,6 @@
   will-change: transform, opacity;
 }
 
-/* ---------- Gallery sheet, sliding up over the band ---------- */
 .sheet {
   position: relative;
   z-index: 1;
@@ -127,7 +125,6 @@
   outline-offset: 4px;
 }
 
-/* ---------- Scatter view ---------- */
 .scatter {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -143,7 +140,6 @@
 .slot {
   grid-column: var(--col);
   margin-top: var(--mt);
-  /* Scroll reveal start state */
   opacity: 0;
   filter: blur(14px);
   transform: translateY(28px) scale(0.97);
@@ -159,7 +155,6 @@
   transform: none;
 }
 
-/* The parallax target. */
 .item {
   position: relative;
   display: block;
@@ -221,7 +216,6 @@
   opacity: 0.6;
 }
 
-/* Film tiles: play button only when autoplay is off (reduced motion). */
 .play {
   position: absolute;
   top: 50%;
@@ -249,13 +243,11 @@
   }
 }
 
-/* Hover ripple canvas, placed over the hovered photo by LaneHoverLiquid. */
 .liquidCanvas {
   z-index: 1;
   pointer-events: none;
 }
 
-/* Comp card item */
 .compCard {
   position: absolute;
   inset: 0;
@@ -309,7 +301,6 @@
   font-size: 16px;
 }
 
-/* ---------- Next lane ---------- */
 .footer {
   display: flex;
   justify-content: center;
@@ -358,13 +349,11 @@
   }
 }
 
-/* Same colour as the band's nav text. */
 .nextPill:focus-visible {
   outline: 2px solid var(--maroon);
   outline-offset: 3px;
 }
 
-/* ---------- Reduced motion: everything static ---------- */
 @media (prefers-reduced-motion: reduce) {
   .slot {
     opacity: 1;
@@ -382,7 +371,6 @@
   }
 }
 
-/* ---------- Mobile (below 768px) ---------- */
 @media (max-width: 767px) {
   .desktopOnly {
     display: none;
@@ -397,7 +385,6 @@
     height: var(--band-h-mobile);
   }
 
-  /* 18px + 24px row: matches the mobile menu's top bar. */
   .bandTop {
     height: auto;
     padding: 18px 16px 0;
@@ -409,7 +396,6 @@
     white-space: normal;
   }
 
-  /* No sticky bar on mobile; the gallery keeps the hairline on top. */
   .bar {
     display: none;
   }

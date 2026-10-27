@@ -8,12 +8,10 @@
 
 .inner {
   width: 100%;
-  /* 592px PORT/FOLIO + 20px gap + 336px frame at full width. */
   max-width: 948px;
   margin: 0 auto;
 }
 
-/* TASTE ▬▬▬ LIFE */
 .topRow {
   display: flex;
   align-items: center;
@@ -36,7 +34,6 @@
   background: var(--cream);
 }
 
-/* Everything below the top row; collapses to 0 height during the loader. */
 .stage {
   display: flex;
   flex-direction: column;
@@ -51,16 +48,13 @@
   padding-top: 14px;
 }
 
-/* PORT / FOLIO */
 .portfolio {
   display: flex;
   flex-direction: column;
   gap: clamp(10px, 1.4vw, 18px);
-  /* Takes all spare width beside the right column; wraps below ~595px. */
   flex: 1000 1 380px;
   aspect-ratio: 16 / 15;
   min-height: 340px;
-  /* min-height + aspect-ratio would force 363px of width on small screens. */
   max-width: 100%;
   margin: 0;
   font: inherit;
@@ -81,18 +75,14 @@
   letter-spacing: 0;
 }
 
-/* Photo frame + names */
 .right {
   display: flex;
-  /* Narrows faster than the row so the 4:5 frame + names never pass FOLIO's bottom
-     (336px at full width, ~197px at 600px); full width once wrapped. */
   flex: 1 1 calc(40% - 43px);
   flex-direction: column;
   justify-content: flex-start;
   gap: 29px;
 }
 
-/* Portrait 4:5, borders included. */
 .frame {
   position: relative;
   box-sizing: border-box;
@@ -124,7 +114,6 @@
   display: block;
 }
 
-/* ENTER bar */
 .enter {
   position: relative;
   display: flex;
@@ -154,7 +143,6 @@
 .label {
   position: relative;
   display: block;
-  /* Mask for the slide-in: clip top and bottom only, so the arrow can nudge right. */
   clip-path: inset(0 -24px);
   line-height: 1.1;
 }
@@ -183,11 +171,9 @@
   stroke: currentColor;
   stroke-width: 2.5;
   stroke-linecap: square;
-  /* The square caps and the arrowhead's tip reach just past the viewBox. */
   overflow: visible;
 }
 
-/* Soft white band swept across the bar by the attention loop. */
 .sheen {
   position: absolute;
   top: -20%;

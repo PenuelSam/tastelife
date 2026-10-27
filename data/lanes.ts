@@ -1,60 +1,34 @@
-/**
- * Content for the three lane pages (/fashion-design, /styling, /modeling).
- *
- * Media lives in /public/lanes/<slug>/ and is referenced from the site root,
- * e.g. public/lanes/styling/look.jpg → "/lanes/styling/look.jpg".
- * Items without `src` show a placeholder block until you add a file.
- *
- * Items fill the 14-slot scatter layout in components/lane/layout.ts in order,
- * repeating it for more than 14.
- */
-
 export type LaneSlug = "fashion-design" | "styling" | "modeling";
 
 export type LaneItem = {
-  /** URL segment: /<lane>/<id> */
   id: string;
-  /** Shown as [num] */
   num: string;
   kind: "image" | "video" | "card";
   src?: string;
-  /** Videos: still shown before playback. */
   poster?: string;
-  /** Videos: short muted loop for the gallery tile (5–8s, 720p, no audio). */
   clip?: string;
   alt: string;
   title: string;
   meta: string;
-  /** Optional line above the credit, e.g. the comp card's agency. */
   date?: string;
   credit: string;
   description: string;
-  /** The two-style name at the bottom of the detail panel. */
   nameScript: string;
   nameCaps: string;
-  /** The media's proportions, e.g. "3 / 4". Landscape frames keep them in the grid. */
   aspect: string;
 };
 
 export type Lane = {
   slug: LaneSlug;
   title: string;
-  /** How the hero title breaks on mobile. */
   titleLines: string[];
   items: LaneItem[];
 };
 
-// Desktop aspect ratios of the 14 scatter slots (see components/lane/layout.ts).
 const ASPECTS = ["3 / 4", "2 / 3", "4 / 5", "1 / 1", "3 / 4", "2 / 3", "4 / 5", "3 / 2", "3 / 4", "2 / 3", "1 / 1", "3 / 4", "3 / 4", "4 / 5"];
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
-/**
- * A run of photos (or a film) from one project; every frame shares its caption.
- * `files` are names in public/lanes/<lane>/ with their proportions, e.g.
- * ["look.jpg", "3 / 4"]. Films are "<name>.mp4" with "<name>-poster.jpg" and
- * "<name>-clip.mp4" beside them. Landscape frames keep their shape in the grid.
- */
 type Series = {
   files: [file: string, aspect: string][];
   title: string;
@@ -95,7 +69,6 @@ function seriesItems(lane: LaneSlug, series: Series[], firstNum = 1): LaneItem[]
   return items;
 }
 
-/* ---------- Fashion design ---------- */
 const fashionItems = seriesItems("fashion-design", [
   {
     files: [["blnde-custom-piece.jpg", "2 / 3"]],
@@ -135,7 +108,6 @@ const fashionItems = seriesItems("fashion-design", [
   },
 ]);
 
-/* ---------- Styling ---------- */
 const temifatade = {
   title: "Temifatade editorial",
   meta: "Editorial",
@@ -205,7 +177,6 @@ const stylingItems = seriesItems("styling", [
   },
 ]);
 
-/* ---------- Modeling: the comp card ([00]) plus editorials ---------- */
 const compCard: LaneItem = {
   id: "00",
   num: "00",
@@ -321,22 +292,16 @@ export const lanes: Record<LaneSlug, Lane> = {
   modeling: { slug: "modeling", title: "Modeling", titleLines: ["Modeling"], items: modelingItems },
 };
 
-/**
- * Items that are shown: anything with a photo or film, plus the comp card.
- * Placeholder items (no src yet) stay hidden until you add their media.
- */
 export function visibleItems(lane: Lane): LaneItem[] {
   return lane.items.filter((item) => item.kind === "card" || Boolean(item.src));
 }
 
-/** Fashion → Styling → Modeling → Fashion Design */
 export const nextLane: Record<LaneSlug, LaneSlug> = {
   "fashion-design": "styling",
   styling: "modeling",
   modeling: "fashion-design",
 };
 
-/** Comp card stats shown in the card's detail panel. */
 export const compCardStats: [label: string, value: string][] = [
   ["Height", "5’5”"],
   ["Bust", "34 in"],

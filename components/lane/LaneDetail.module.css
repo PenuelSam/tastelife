@@ -1,8 +1,7 @@
-/* Full-screen detail: filmstrip | media | maroon panel */
 .overlay {
   position: fixed;
   inset: 0;
-  z-index: 150; /* above the mobile menu (100), below the page transition (1000) */
+  z-index: 150;
   display: grid;
   grid-template-columns: 76px minmax(0, 1fr) minmax(360px, 34%);
   height: 100svh;
@@ -10,7 +9,6 @@
   color: var(--maroon);
 }
 
-/* ---------- Filmstrip ---------- */
 .film {
   display: flex;
   flex-direction: column;
@@ -52,7 +50,6 @@
   outline-offset: 2px;
 }
 
-/* ---------- Media ---------- */
 .stage {
   position: relative;
   display: flex;
@@ -64,7 +61,6 @@
   container-type: size;
 }
 
-/* Frame for the page-curl + liquid entry (driven by GSAP in DetailMedia). */
 .curl {
   position: relative;
   display: flex;
@@ -75,13 +71,11 @@
   transform-origin: 0% 50%;
 }
 
-/* Liquid reveal canvas, sized over the image while it runs. */
 .revealCanvas {
   position: absolute;
   pointer-events: none;
 }
 
-/* Film: muted, tap to play or pause. No native controls. */
 .videoHost {
   position: relative;
   display: flex;
@@ -125,7 +119,6 @@
   display: flex;
 }
 
-/* Photos and films at their own proportions, as large as the stage allows. */
 .media {
   display: block;
   width: auto;
@@ -134,7 +127,6 @@
   max-height: 100%;
 }
 
-/* Placeholders and the comp card: fitted using their data aspect ratio. */
 .box {
   position: relative;
   display: block;
@@ -159,7 +151,6 @@
   opacity: 0.6;
 }
 
-/* ---------- Close ---------- */
 .close {
   position: absolute;
   top: 16px;
@@ -193,7 +184,6 @@
   outline-offset: 3px;
 }
 
-/* ---------- Maroon panel ---------- */
 .panel {
   position: relative;
   display: flex;
@@ -240,7 +230,6 @@
   opacity: 0.85;
 }
 
-/* No date line: the credit takes its spacing. */
 .num + .credit {
   margin-top: 16px;
 }
@@ -253,7 +242,6 @@
   opacity: 0.8;
 }
 
-/* @handles in credits and descriptions, linked to Instagram. */
 .handle {
   color: inherit;
   text-decoration: underline;
@@ -377,7 +365,6 @@
   }
 }
 
-/* ---------- Mobile: media on top, panel slides up below ---------- */
 @media (max-width: 767px) {
   .overlay {
     display: block;
@@ -395,7 +382,6 @@
     padding: 16px;
   }
 
-  /* Top-right of the maroon panel, on the same row as the [num]. */
   .close {
     top: 20px;
     right: 16px;

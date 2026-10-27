@@ -1,7 +1,3 @@
-/**
- * Fixed scatter layout for the 14 slots of every lane (12-column grid).
- * col: grid-column; mt: extra top offset in px; ar: aspect ratio.
- */
 export type Slot = { col: string; mt: number; ar: string };
 
 export const DESKTOP_SLOTS: Slot[] = [
@@ -38,16 +34,13 @@ export const MOBILE_SLOTS: Slot[] = [
   { col: "3 / span 6", mt: 0, ar: "2 / 3" },
 ];
 
-/** Parallax speed per slot; mobile uses half. */
 export const PARALLAX = [0.1, -0.06, 0.14, -0.1, 0.04, 0.12, -0.08, 0.08, -0.12, 0.06, -0.04, 0.1, -0.07, 0.09];
 
-/** "3 / 4" → 0.75 */
 export function ratio(ar: string): number {
   const [w, h] = ar.split("/").map((n) => parseFloat(n));
   return w / h;
 }
 
-/** Widens a slot to at least `min` of the 12 columns, keeping it inside the grid. */
 export function widen(col: string, min: number): string {
   const [start, span] = col.split("/ span").map((n) => parseInt(n, 10));
   if (span >= min) return col;

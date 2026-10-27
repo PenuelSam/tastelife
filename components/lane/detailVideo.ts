@@ -1,11 +1,6 @@
 import type { LaneItem } from "@/data/lanes";
 import { prefersReducedMotion } from "./gl";
 
-/**
- * The detail view's film, always muted. The click handler calls
- * primeDetailVideo() so loading starts right away; the detail view then adopts
- * the same element.
- */
 let video: HTMLVideoElement | null = null;
 
 export function primeDetailVideo(item: LaneItem): HTMLVideoElement | null {
@@ -27,14 +22,12 @@ export function primeDetailVideo(item: LaneItem): HTMLVideoElement | null {
   return el;
 }
 
-/** The primed element for this item, if the click already started it. */
 export function takeDetailVideo(item: LaneItem): HTMLVideoElement | null {
   return video && video.dataset.itemId === item.id ? video : null;
 }
 
 export function stopDetailVideo(el: HTMLVideoElement) {
   el.remove();
-  // Wait a tick: a remount of the same item (e.g. React StrictMode) re-attaches it.
   setTimeout(() => {
     if (!el.isConnected) el.pause();
   }, 0);

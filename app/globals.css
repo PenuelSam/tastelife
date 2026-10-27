@@ -8,8 +8,6 @@
 
   --nav-h: 60px;
 
-  /* Rounded corners: /work and the lane pages only. Buttons, bars, dividers
-     and the homepage stay square. */
   --radius-frame: 12px;
   --radius-media: 8px;
   --radius-polaroid: 10px;
@@ -49,10 +47,6 @@ a {
   text-decoration: none;
 }
 
-/* Red is a background only on the homepage. Pages that mark their <main>
-   data-theme="paper" get paper behind everything (incl. the shared nav) and
-   red accent text. Only the visible page counts: Next keeps pages you've left
-   mounted but hidden (display: none), and those must not set the colour. */
 body:has(main[data-theme="paper"]:not([style*="display: none"])) {
   background: var(--paper);
   color: var(--deep-red);
@@ -66,8 +60,6 @@ svg {
   max-width: 100%;
 }
 
-/* Homepage intro: keep the hero and nav hidden until GSAP sets their start
-   states, so nothing flashes before the intro. Reduced motion skips this. */
 @media (prefers-reduced-motion: no-preference) {
   [data-home-intro],
   body:has([data-home-intro]) [data-site-nav] {

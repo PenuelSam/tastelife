@@ -17,7 +17,6 @@ import { useLenis } from "./SmoothScroll";
 import styles from "./PageTransition.module.css";
 
 const DURATION_MS = 1300;
-// Uncover anyway if the new route never reports in (e.g. same pathname).
 const MAX_COVERED_MS = 5000;
 
 const COVER = 0;
@@ -79,12 +78,10 @@ function createEngine(): Engine | null {
   const resize = () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     uniforms.uResolution.value.set(window.innerWidth, window.innerHeight);
-    // Resizing clears the canvas; redraw so a held cover stays covered.
     if (visible) draw();
   };
   resize();
   window.addEventListener("resize", resize);
-  // Compile the shader now (progress 0 draws nothing) so the first click doesn't stall.
   draw();
 
   return {
@@ -125,7 +122,6 @@ type PageTransition = { navigate: (href: string) => void };
 
 const PageTransitionContext = createContext<PageTransition | null>(null);
 
-/** `navigate(href)` covers the screen, changes route, then uncovers. */
 export function usePageTransition(): PageTransition {
   const ctx = useContext(PageTransitionContext);
   const router = useRouter();
@@ -160,7 +156,6 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
     if (state.phase !== "covered" || !engine) return;
     window.clearTimeout(state.timeout);
     state.phase = "uncovering";
-    // Two frames so the new page has painted under the cover.
     requestAnimationFrame(() =>
       requestAnimationFrame(() =>
         engine.play(UNCOVER, () => {
@@ -171,7 +166,6 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
     );
   }, []);
 
-  // The new page has mounted once the pathname matches the target.
   useEffect(() => {
     pathnameRef.current = pathname;
     if (stateRef.current.target === pathname) uncover();
@@ -209,7 +203,6 @@ export function PageTransitionProvider({ children }: { children: ReactNode }) {
 
 type TransitionLinkProps = Omit<ComponentProps<typeof Link>, "href"> & { href: string };
 
-/** Drop-in `Link` that navigates through the liquid transition. */
 export function TransitionLink({ href, onClick, ...rest }: TransitionLinkProps) {
   const { navigate } = usePageTransition();
   return (
@@ -218,7 +211,6 @@ export function TransitionLink({ href, onClick, ...rest }: TransitionLinkProps) 
       {...rest}
       onClick={(e) => {
         onClick?.(e);
-        // Leave new-tab clicks and anything already handled to the browser.
         if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
         if (rest.target && rest.target !== "_self") return;
         e.preventDefault();
@@ -228,7 +220,7 @@ export function TransitionLink({ href, onClick, ...rest }: TransitionLinkProps) 
   );
 }
 
-const vertex = /* glsl */ `
+const vertex = `
   attribute vec2 uv;
   attribute vec2 position;
   varying vec2 vUv;
@@ -239,7 +231,7 @@ const vertex = /* glsl */ `
   }
 `;
 
-const fragment = /* glsl */ `
+const fragment = `
   precision highp float;
 
   uniform float uProgress;
@@ -252,7 +244,6 @@ const fragment = /* glsl */ `
   const vec3 LIQUID = vec3(158.0, 23.0, 18.0) / 255.0;
   const vec3 BAND = vec3(192.0, 46.0, 34.0) / 255.0;
 
-  // A few narrow, rounded drips: sine peaks raised to high powers.
   float drips(float x, float seed) {
     return pow(max(sin(x * 2.3 + seed), 0.0), 60.0)
       + pow(max(sin(x * 3.7 + seed * 1.7 + 1.3), 0.0), 90.0) * 0.7
@@ -264,20 +255,17 @@ const fragment = /* glsl */ `
   }
 
   void main() {
-    // x in screen-height units so drips keep their shape at any aspect ratio.
     float x = vUv.x * (uResolution.x / uResolution.y) * 3.0;
-    float y = 1.0 - vUv.y; // 0 at the top, 1 at the bottom
+    float y = 1.0 - vUv.y;
     float p = uProgress;
-    // Waves and drips only mid-transition, so start and end are clean.
+
     float shape = sin(3.14159265 * p);
 
-    float dist; // > 0 inside the liquid, in screen heights from its moving edge
+    float dist;
     if (uMode < 0.5) {
-      // Cover: the leading edge pours down from the top.
       float front = mix(-0.04, 1.04, p) + shape * (0.018 * waves(x, 0.0) + 0.07 * drips(x, 0.0));
       dist = front - y;
     } else {
-      // Uncover: the top edge drains downward, drips trailing behind it.
       float back = mix(-0.04, 1.04, p) + shape * (0.018 * waves(x, 5.0) - 0.06 * drips(x, 11.0));
       dist = y - back;
     }

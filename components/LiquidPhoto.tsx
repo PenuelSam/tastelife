@@ -5,7 +5,6 @@ import { Flowmap, Mesh, Program, Renderer, Texture, Triangle, Vec2, Vec3 } from 
 import styles from "./LiquidPhoto.module.css";
 
 export type LiquidPhotoHandle = {
-  /** Plays the liquid reveal once. Later calls are ignored. */
   start: () => void;
 };
 
@@ -16,11 +15,10 @@ type Props = {
 };
 
 const REVEAL_MS = 2600;
-// Keep rendering this long after the last pointer event so the flow can settle.
 const IDLE_MS = 2500;
 
 const rgb = (r: number, g: number, b: number): [number, number, number] => [r / 255, g / 255, b / 255];
-const BASE = rgb(184, 31, 23); // #B81F17, matches the frame background
+const BASE = rgb(184, 31, 23);
 const DARK = rgb(77, 5, 10);
 const LIGHT = rgb(255, 179, 158);
 
@@ -31,7 +29,6 @@ type Source = HTMLImageElement | HTMLCanvasElement;
 const sourceSize = (s: Source) =>
   s instanceof HTMLImageElement ? [s.naturalWidth, s.naturalHeight] : [s.width, s.height];
 
-/** Grey head-and-shoulders placeholder used when the photo can't load. */
 function silhouette(): HTMLCanvasElement {
   const c = document.createElement("canvas");
   c.width = 600;
@@ -71,7 +68,6 @@ function hasWebGL(): boolean {
   }
 }
 
-/** Static fallback without WebGL: cover-fit duotone drawn once on a 2D canvas. */
 function drawStatic(canvas: HTMLCanvasElement, source: Source, w: number, h: number, dpr: number) {
   const cw = Math.round(w * dpr);
   const ch = Math.round(h * dpr);
@@ -93,7 +89,6 @@ function drawStatic(canvas: HTMLCanvasElement, source: Source, w: number, h: num
     }
     ctx.putImageData(data, 0, 0);
   } catch {
-    // Pixel access blocked: leave the plain photo.
   }
 }
 
@@ -120,13 +115,11 @@ export default function LiquidPhoto({ src, alt, ref }: Props) {
     if (!wrap || !frame) return;
 
     const engine = engineRef.current;
-    // Each mount plays its own reveal (Next can hide and re-show this page).
     engine.revealStart = null;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const touch = window.matchMedia("(hover: none), (pointer: coarse)").matches;
     const dpr = Math.min(window.devicePixelRatio || 1, touch ? 1.5 : 2);
 
-    // A fresh canvas per mount, so a lost context is never reused.
     const canvas = document.createElement("canvas");
     canvas.className = styles.canvas;
     wrap.appendChild(canvas);
@@ -198,7 +191,7 @@ export default function LiquidPhoto({ src, alt, ref }: Props) {
       try {
         flowmap = new Flowmap(gl, { falloff: 0.25, alpha: 0.6, dissipation: 0.93 });
       } catch {
-        return; // No half-float render targets: the photo just stays still.
+        return;
       }
       flowmap.aspect = wrap.clientWidth / wrap.clientHeight || 1;
       uniforms.uFlowAmount.value = 1;
@@ -213,7 +206,6 @@ export default function LiquidPhoto({ src, alt, ref }: Props) {
         uniforms.uMouse.value.copy(flowmap.mouse);
         const now = performance.now();
         if (last) {
-          // px per ms, y down (the flowmap flips y in its stamp).
           const dt = Math.max(10.4, now - last.t);
           targetVelocity.set((x - last.x) / dt, (y - last.y) / dt);
           moved = true;
@@ -317,7 +309,7 @@ export default function LiquidPhoto({ src, alt, ref }: Props) {
   return <div ref={wrapRef} className={styles.root} role="img" aria-label={alt} />;
 }
 
-const vertex = /* glsl */ `
+const vertex = `
   attribute vec2 uv;
   attribute vec2 position;
   varying vec2 vUv;
@@ -328,7 +320,7 @@ const vertex = /* glsl */ `
   }
 `;
 
-const fragment = /* glsl */ `
+const fragment = `
   precision highp float;
 
   uniform sampler2D tMap;
@@ -346,7 +338,6 @@ const fragment = /* glsl */ `
 
   varying vec2 vUv;
 
-  // object-fit: cover, clamped so displacement never shows the image edges.
   vec2 cover(vec2 uv) {
     float canvasAspect = uResolution.x / uResolution.y;
     float imageAspect = uImageSize.x / uImageSize.y;
@@ -365,7 +356,6 @@ const fragment = /* glsl */ `
     float t = uTime;
     float aspect = uResolution.x / uResolution.y;
 
-    // Part 1: liquid distortion while revealing, gone at reveal = 1.
     float liquid = (1.0 - uReveal) * (1.0 - uReveal);
     vec2 wave = vec2(
       sin(uv.y * 6.0 + t * 1.3) * 0.045 + sin(uv.y * 14.0 - t * 2.1) * 0.025,
@@ -375,7 +365,6 @@ const fragment = /* glsl */ `
     vec2 offset = wave * liquid;
     float split = 0.012 * liquid;
 
-    // Part 2: cursor flow, at most 4.5% of the frame.
     vec2 flow = texture2D(tFlow, uv).rg * 0.03 * uFlowAmount;
     flow *= min(1.0, 0.045 / max(length(flow), 0.0001));
     offset -= flow;
@@ -390,7 +379,6 @@ const fragment = /* glsl */ `
     offset += dir * sin(dist * 70.0 - t * 9.0) * 0.006 * ring;
     split += length(flow) * 0.18;
 
-    // Red duotone with a slight channel split.
     vec2 base = uv + offset;
     vec2 shift = vec2(split, 0.0);
     vec3 duo = vec3(
@@ -399,7 +387,6 @@ const fragment = /* glsl */ `
       mix(uDark.b, uLight.b, luma(base - shift))
     );
 
-    // Wavy edge rising from just below the frame to just above it.
     float edgeWave = (sin(uv.x * 7.0 + t * 2.0) * 0.03 + sin(uv.x * 13.0 - t * 3.0) * 0.015) * (1.0 - uReveal);
     float edge = mix(-0.09, 1.04, uReveal) + edgeWave;
     float mask = 1.0 - smoothstep(edge - 0.035, edge, uv.y);

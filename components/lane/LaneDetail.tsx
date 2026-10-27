@@ -18,13 +18,10 @@ const SWIPE_PX = 50;
 const MOBILE = "(max-width: 767px)";
 
 type Props = {
-  /** Lane name, for the dialog label. */
   title: string;
-  /** The lane's visible items (placeholders excluded). */
   items: LaneItem[];
   index: number;
   onShow: (index: number) => void;
-  /** Called once the closing animation has finished; the parent then unmounts this. */
   onClose: () => void;
 };
 
@@ -39,14 +36,11 @@ export default function LaneDetail({ title, items, index, onShow, onClose }: Pro
   const item = items[index];
   const count = items.length;
 
-  // The URL (and so `index`) updates a frame or two after a key press; this ref
-  // moves immediately, so quick repeated presses each step exactly one item.
   const indexRef = useRef(index);
   useEffect(() => {
     indexRef.current = index;
   }, [index]);
 
-  // Start loading a film as soon as it's chosen.
   const showItem = (i: number) => {
     if (closingRef.current) return;
     indexRef.current = i;
@@ -55,7 +49,6 @@ export default function LaneDetail({ title, items, index, onShow, onClose }: Pro
   };
   const go = (step: number) => showItem((indexRef.current + step + count) % count);
 
-  // Lock page scroll, pause Lenis and move focus in while open.
   useEffect(() => {
     const root = document.documentElement;
     const previous = root.style.overflow;
@@ -69,7 +62,6 @@ export default function LaneDetail({ title, items, index, onShow, onClose }: Pro
     };
   }, [lenis]);
 
-  // If we unmount mid-close (e.g. the browser's Back button), stop and un-hide the tile.
   useEffect(
     () => () => {
       closingRef.current?.kill();
@@ -78,12 +70,6 @@ export default function LaneDetail({ title, items, index, onShow, onClose }: Pro
     []
   );
 
-  /**
-   * Close back to where the viewer was: the media flies (GSAP Flip) into its
-   * tile in the gallery while the overlay fades and its chrome slides away.
-   * The gallery never moved, so the scroll position is untouched. If the tile
-   * is off-screen (after Prev/Next), the media just sinks and fades instead.
-   */
   const requestClose = () => {
     if (closingRef.current) return;
     const overlay = dialogRef.current;
@@ -97,7 +83,6 @@ export default function LaneDetail({ title, items, index, onShow, onClose }: Pro
       return;
     }
 
-    // Settle the entry animation first: stop the curl, drop any liquid-reveal canvas.
     const frame = overlay.querySelector<HTMLElement>("[data-detail-frame]");
     if (frame) {
       gsap.killTweensOf(frame);
@@ -119,8 +104,6 @@ export default function LaneDetail({ title, items, index, onShow, onClose }: Pro
     if (media && tileMedia && tileOnScreen) {
       gsap.set(media, { zIndex: 3, objectFit: "cover" });
       tl.add(Flip.fit(media, tileMedia, { absolute: true, scale: false, duration: 0.7, ease: "power3.inOut" }) as gsap.core.Tween, 0);
-      // Hide the tile's own media until the flying copy lands on it. (After
-      // Flip.fit, which restores the target's inline styles once measured.)
       tileMedia.style.visibility = "hidden";
       tl.eventCallback("onComplete", () => {
         tileMedia.style.visibility = "";
@@ -131,7 +114,6 @@ export default function LaneDetail({ title, items, index, onShow, onClose }: Pro
     }
   };
 
-  // Keep the current thumbnail in view.
   useEffect(() => {
     filmRef.current
       ?.querySelector<HTMLElement>('[aria-current="true"]')
@@ -211,7 +193,6 @@ export default function LaneDetail({ title, items, index, onShow, onClose }: Pro
         <DetailMedia key={item.id} item={item} />
       </div>
 
-
       <aside ref={panelRef} className={styles.panel}>
         <p className={styles.num}>{`[${item.num}]`}</p>
         {item.date && <p className={styles.date}>{item.date}</p>}
@@ -257,7 +238,6 @@ export default function LaneDetail({ title, items, index, onShow, onClose }: Pro
           </div>
         </div>
 
-        {/* Top-right of the panel, on the [num] row (desktop and mobile). */}
         <button ref={closeRef} type="button" className={styles.close} onClick={requestClose} aria-label="Close">
           <svg viewBox="0 0 14 14" aria-hidden="true">
             <path d="M1 1l12 12M13 1L1 13" />

@@ -9,7 +9,6 @@ import styles from "./HomeHero.module.css";
 
 gsap.registerPlugin(useGSAP);
 
-// Font size used for canvas measurement and SVG text; the viewBox makes it scale-free.
 const MEASURE_SIZE = 200;
 const WORDS = ["PORT", "FOLIO"];
 
@@ -25,7 +24,6 @@ function measureWord(ctx: CanvasRenderingContext2D, word: string): WordMetrics {
   const left = m.actualBoundingBoxLeft;
   const width = left + m.actualBoundingBoxRight;
   const height = m.actualBoundingBoxAscent + m.actualBoundingBoxDescent;
-  // Each letter's x is the advance width of everything before it.
   const xs = [...word].map((_, i) => ctx.measureText(word.slice(0, i)).width);
   return {
     word,
@@ -41,7 +39,6 @@ export default function HomeHero() {
   const photoRef = useRef<LiquidPhotoHandle>(null);
   const [metrics, setMetrics] = useState<WordMetrics[] | null>(null);
 
-  // Measure the ink box of each word once the display font has loaded.
   useEffect(() => {
     let cancelled = false;
     const box = portfolioRef.current;
@@ -90,9 +87,6 @@ export default function HomeHero() {
       const sheen = q(`.${styles.sheen}`);
       const arrow = q(`.${styles.arrow}`);
 
-      // Start states. The global intro-hide rule keeps everything invisible until here.
-      // Loader position: push the content down so the top row sits centered on
-      // screen (the nav is hidden then); it collapses back to the page padding.
       const rowTop = (topRow[0] as HTMLElement).getBoundingClientRect().top + window.scrollY;
       const rowH = (topRow[0] as HTMLElement).offsetHeight;
       const lead = Math.max(0, (window.innerHeight - rowH) / 2 - rowTop);
@@ -109,12 +103,8 @@ export default function HomeHero() {
       gsap.set(sheen, { xPercent: -200, skewX: -20, opacity: 0.5 });
       if (nav) gsap.set(nav, { autoAlpha: 0, y: -16 });
       gsap.set(hero, { autoAlpha: 1 });
-      // GSAP's inline styles own visibility from here, so drop the pre-intro CSS
-      // hide. Otherwise it would also hide the nav on other routes, where Next
-      // keeps this page mounted but hidden.
       hero.removeAttribute("data-home-intro");
 
-      // Attention loop: one sweep + double nudge per 3.4s cycle. Started after the intro.
       const sweep = 1.1;
       const loop = gsap.timeline({ paused: true, repeat: -1, repeatDelay: 3.4 - sweep });
       loop
@@ -124,30 +114,23 @@ export default function HomeHero() {
       let introDone = false;
       const tl = gsap.timeline();
 
-      // 1. Loader: TASTE LIFE fades in, tracking tightens.
       tl.to(words, { opacity: 1, letterSpacing: "0.01em", duration: 1, ease: "power3.out" }, 0);
 
-      // 2. The block springs up from below, pushing the top line into place.
       tl.to(inner, { marginTop: 0, duration: 1.2, ease: "power3.inOut" }, 0.7)
         .to(stage, { height: "auto", duration: 1.2, ease: "back.out(1.3)" }, 0.7)
         .to(stageInner, { scaleY: 1, duration: 1.2, ease: "back.out(1.6)" }, 0.7)
         .to(letters, { y: 0, duration: 0.9, ease: "power4.out", stagger: 0.08 }, 0.85)
-        // The photo rises into the frame 0.7s after the block starts growing.
         .call(() => photoRef.current?.start(), undefined, 1.4);
 
-      // 3. The bar pushes the words apart; names slide up from their masks.
       tl.to(bar, { flexGrow: 1, duration: 1.1, ease: "expo.inOut" }, 1.9)
         .to(topRow, { columnGap: 16, duration: 1.1, ease: "expo.inOut" }, 1.9)
         .to(names, { yPercent: 0, duration: 0.9, ease: "power4.out", stagger: 0.1 }, 2.1);
 
-      // 4. ENTER bar grows, then its label slides in.
       tl.to(enter, { scaleX: 1, duration: 0.7, ease: "expo.inOut" }, 2.9)
         .to(label, { yPercent: 0, duration: 0.5, ease: "power3.out" }, 3.45);
 
-      // 5. Nav fades down last.
       if (nav) tl.to(nav, { autoAlpha: 1, y: 0, duration: 0.7, ease: "power2.out" }, 4.05);
 
-      // Hand layout back to CSS so the page stays responsive.
       tl.set(inner, { clearProps: "marginTop" })
         .set(topRow, { clearProps: "columnGap" })
         .set(stage, { clearProps: "height,overflow" })
