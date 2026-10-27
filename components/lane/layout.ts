@@ -46,3 +46,10 @@ export function ratio(ar: string): number {
   const [w, h] = ar.split("/").map((n) => parseFloat(n));
   return w / h;
 }
+
+/** Widens a slot to at least `min` of the 12 columns, keeping it inside the grid. */
+export function widen(col: string, min: number): string {
+  const [start, span] = col.split("/ span").map((n) => parseInt(n, 10));
+  if (span >= min) return col;
+  return `${Math.min(start, 13 - min)} / span ${min}`;
+}

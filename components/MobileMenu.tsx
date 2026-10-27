@@ -21,8 +21,8 @@ import styles from "./MobileMenu.module.css";
 gsap.registerPlugin(useGSAP);
 
 const NAME = "Taiwo Adeoshun";
-const EMAIL = "[email]";
-const INSTAGRAM_URL = "[instagram]";
+const EMAIL = "tastelifeis@gmail.com";
+const INSTAGRAM_URL = "https://www.instagram.com/tastelifeis._/";
 
 const WORK_LINKS = [
   { label: "Fashion design", href: "/fashion-design" },

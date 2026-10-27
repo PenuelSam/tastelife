@@ -2,11 +2,9 @@ import type { LaneItem } from "@/data/lanes";
 import { prefersReducedMotion } from "./gl";
 
 /**
- * The detail view's film. Browsers only allow playback with sound inside a user
- * gesture, but the detail view renders after the click. So the click handler
- * calls primeDetailVideo(): it creates the element, unmutes it and calls play()
- * right there; the detail view then adopts the same element. If play() with
- * sound is refused, it falls back to muted playback (the viewer taps to unmute).
+ * The detail view's film, always muted. The click handler calls
+ * primeDetailVideo() so loading starts right away; the detail view then adopts
+ * the same element.
  */
 let video: HTMLVideoElement | null = null;
 
@@ -15,6 +13,7 @@ export function primeDetailVideo(item: LaneItem): HTMLVideoElement | null {
   if (!video) {
     video = document.createElement("video");
     video.playsInline = true;
+    video.muted = true;
     video.loop = true;
     video.preload = "auto";
   }
@@ -24,13 +23,7 @@ export function primeDetailVideo(item: LaneItem): HTMLVideoElement | null {
     el.poster = item.poster ?? "";
     el.dataset.itemId = item.id;
   }
-  el.muted = false;
-  if (!prefersReducedMotion()) {
-    el.play().catch(() => {
-      el.muted = true;
-      el.play().catch(() => {});
-    });
-  }
+  if (!prefersReducedMotion()) el.play().catch(() => {});
   return el;
 }
 

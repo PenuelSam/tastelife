@@ -18,7 +18,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<"/modeling/[id]">): Promise<Metadata> {
   const { id } = await params;
   const item = items.find((i) => i.id === id);
-  return { title: item ? `${item.title} — Modeling — Taiwo Adeoshun` : "Modeling — Taiwo Adeoshun" };
+  return { title: item ? `${item.title} | Modeling | Taiwo Adeoshun` : "Modeling | Taiwo Adeoshun" };
 }
 
 async function KnownItem({ params }: { params: Promise<{ id: string }> }) {

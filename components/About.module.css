@@ -23,7 +23,8 @@
   display: grid;
   flex: 1;
   grid-template-columns: 1fr 1fr;
-  align-content: center;
+  /* One row filling the screen: opening the bio never changes its height. */
+  grid-template-rows: 1fr;
   align-items: center;
   gap: clamp(24px, 4vw, 64px);
   width: 100%;
@@ -166,22 +167,33 @@
   padding-top: 1em;
 }
 
+/* Inline text right after the last word. */
 .readMore {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 44px;
-  margin-top: 4px;
+  position: relative;
+  display: inline;
   padding: 0;
   border: 0;
   background: none;
   color: var(--red);
-  font-family: var(--font-body), sans-serif;
+  font: inherit;
   font-weight: 600;
-  font-size: 13px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  white-space: nowrap;
   cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+/* A bigger tap area that doesn't make the line any taller. */
+.readMore::after {
+  content: "";
+  position: absolute;
+  inset: -12px -6px;
+}
+
+.readMore:hover {
+  text-decoration-thickness: 2px;
 }
 
 .readMore:focus-visible {
@@ -189,21 +201,17 @@
   outline-offset: 3px;
 }
 
-.readMoreIcon {
-  width: 12px;
-  height: 8px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  transition: rotate 0.3s ease;
-}
-
-.readMoreIcon[data-open] {
-  rotate: 180deg;
+/* Fades out, then leaves the tab order; coming back it's visible (and focusable) at once. */
+.readMore[data-hidden] {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.3s ease,
+    visibility 0s linear 0.3s;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .readMoreIcon {
+  .readMore {
     transition: none;
   }
 }
@@ -275,6 +283,8 @@
 
   .grid {
     grid-template-columns: 1fr;
+    grid-template-rows: none;
+    align-content: center;
     gap: 20px;
     padding-top: 0;
   }

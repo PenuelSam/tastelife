@@ -12,7 +12,7 @@ import { primeDetailVideo } from "./detailVideo";
 import LaneDetail from "./LaneDetail";
 import LaneHoverLiquid from "./LaneHoverLiquid";
 import LaneMedia from "./LaneMedia";
-import { DESKTOP_SLOTS, MOBILE_SLOTS, PARALLAX } from "./layout";
+import { DESKTOP_SLOTS, MOBILE_SLOTS, PARALLAX, ratio, widen } from "./layout";
 import styles from "./LanePage.module.css";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
@@ -83,18 +83,22 @@ const Gallery = memo(function Gallery({ items, onOpen }: { items: LaneItem[]; on
   return (
     <ul ref={listRef} className={styles.scatter}>
       {items.map((item, i) => {
-        const d = DESKTOP_SLOTS[i];
-        const m = MOBILE_SLOTS[i];
+        // The 14-slot layout repeats for longer lanes.
+        const slot = i % DESKTOP_SLOTS.length;
+        const d = DESKTOP_SLOTS[slot];
+        const m = MOBILE_SLOTS[slot];
+        // Landscape frames keep their own shape (and a wider column) instead of a portrait crop.
+        const landscape = item.kind !== "card" && ratio(item.aspect) > 1;
         const vars = {
-          "--col": d.col,
+          "--col": landscape ? widen(d.col, 4) : d.col,
           "--mt": `${d.mt}px`,
-          "--ar": d.ar,
-          "--col-m": m.col,
+          "--ar": landscape ? item.aspect : d.ar,
+          "--col-m": landscape ? widen(m.col, 7) : m.col,
           "--mt-m": `${m.mt}px`,
-          "--ar-m": m.ar,
+          "--ar-m": landscape ? item.aspect : m.ar,
         } as CSSProperties;
         return (
-          <li key={item.id} className={styles.slot} style={vars} data-reveal data-speed={PARALLAX[i]}>
+          <li key={item.id} className={styles.slot} style={vars} data-reveal data-speed={PARALLAX[slot]}>
             <button
               type="button"
               className={styles.item}
@@ -136,7 +140,7 @@ export default function LanePage({ slug }: { slug: LaneSlug }) {
 
   const open = useCallback(
     (id: string) => {
-      // Start a film inside the click so it may play with sound in the detail view.
+      // Start loading a film inside the click, before the detail view renders.
       const item = items.find((i) => i.id === id);
       if (item) primeDetailVideo(item);
       window.history.pushState(null, "", `/${slug}/${id}`);

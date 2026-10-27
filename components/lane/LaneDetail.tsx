@@ -6,6 +6,7 @@ import { Flip } from "gsap/Flip";
 import { BOOKING_EMAIL, compCardStats, type LaneItem } from "@/data/lanes";
 import { useLenis } from "../SmoothScroll";
 import DetailMedia from "./DetailMedia";
+import Handles from "./Handles";
 import { primeDetailVideo } from "./detailVideo";
 import { prefersReducedMotion } from "./gl";
 import LaneMedia from "./LaneMedia";
@@ -45,7 +46,7 @@ export default function LaneDetail({ title, items, index, onShow, onClose }: Pro
     indexRef.current = index;
   }, [index]);
 
-  // Item changes come from clicks, keys or swipes, so a film can start with sound here.
+  // Start loading a film as soon as it's chosen.
   const showItem = (i: number) => {
     if (closingRef.current) return;
     indexRef.current = i;
@@ -213,16 +214,18 @@ export default function LaneDetail({ title, items, index, onShow, onClose }: Pro
 
       <aside ref={panelRef} className={styles.panel}>
         <p className={styles.num}>{`[${item.num}]`}</p>
-        <p className={styles.date}>{item.date}</p>
-        <p className={styles.credit}>{item.credit}</p>
+        {item.date && <p className={styles.date}>{item.date}</p>}
+        <p className={styles.credit}>
+          <Handles text={item.credit} className={styles.handle} />
+        </p>
 
         {item.kind === "card" ? (
           <>
             <dl className={styles.stats}>
-              {compCardStats.map((label) => (
+              {compCardStats.map(([label, value]) => (
                 <div key={label} className={styles.stat}>
                   <dt>{label}</dt>
-                  <dd>[ ]</dd>
+                  <dd>{value}</dd>
                 </div>
               ))}
             </dl>
@@ -231,7 +234,9 @@ export default function LaneDetail({ title, items, index, onShow, onClose }: Pro
             </a>
           </>
         ) : (
-          <p className={styles.description}>{item.description}</p>
+          <p className={styles.description}>
+            <Handles text={item.description} className={styles.handle} />
+          </p>
         )}
 
         <div className={styles.bottom}>

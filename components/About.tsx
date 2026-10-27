@@ -6,12 +6,12 @@ import FitText from "./FitText";
 import LaneNav from "./LaneNav";
 import styles from "./About.module.css";
 
-const EMAIL = "[email]";
-const INSTAGRAM_URL = "[instagram]";
+const EMAIL = "tastelifeis@gmail.com";
+const INSTAGRAM_URL = "https://www.instagram.com/tastelifeis._/";
 const BIO = [
-  "I’m Taiwo Adeoshun, creatively known as Tastelife—a name I’ve made my own, inspired by Taiwo, a name traditionally given to the first-born twin in Yoruba culture.",
+  "I’m Taiwo Adeoshun, creatively known as Tastelife, a name I’ve made my own, inspired by Taiwo, a name traditionally given to the first-born twin in Yoruba culture.",
   "I’m a fashion designer, stylist, and model, working across all three disciplines to explore fashion as a form of identity, visual expression, and storytelling. I’m interested in the relationship between what we wear, how we present ourselves, and the worlds we can create through fashion.",
-  "I’m young, ambitious, hardworking, and deeply curious. I approach every opportunity with the intention to create, contribute, learn, and evolve. I’m not interested in staying within one definition of what I can do—I want to keep expanding my creative language and discovering where it can take me.",
+  "I’m young, ambitious, hardworking, and deeply curious. I approach every opportunity with the intention to create, contribute, learn, and evolve. I’m not interested in staying within one definition of what I can do. I want to keep expanding my creative language and discovering where it can take me.",
   "Whether I’m designing a piece, creating a look, or stepping in front of the camera, I want to bring a perspective that feels distinct, intentional, and memorable.",
 ];
 

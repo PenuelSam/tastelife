@@ -90,14 +90,14 @@ function createReveal(frame: HTMLElement, img: HTMLImageElement): Reveal | null 
   };
 }
 
-/** Film in the detail view: sound on when the click allowed it; tap to unmute or play/pause. */
+/** Film in the detail view: muted, tap to play or pause. */
 function DetailVideo({ item }: { item: LaneItem }) {
   const hostRef = useRef<HTMLButtonElement>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
     const host = hostRef.current;
-    // Adopt the element the click started; on a direct link, start it now (muted if refused).
+    // Adopt the element the click started; on a direct link, start it now.
     const video = takeDetailVideo(item) ?? primeDetailVideo(item);
     if (!host || !video) return;
     videoRef.current = video;
@@ -119,10 +119,7 @@ function DetailVideo({ item }: { item: LaneItem }) {
   const onTap = () => {
     const video = videoRef.current;
     if (!video) return;
-    if (video.muted) {
-      video.muted = false;
-      video.play().catch(() => {});
-    } else if (video.paused) {
+    if (video.paused) {
       video.play().catch(() => {});
     } else {
       video.pause();
@@ -130,7 +127,7 @@ function DetailVideo({ item }: { item: LaneItem }) {
   };
 
   return (
-    <button ref={hostRef} type="button" className={styles.videoHost} onClick={onTap} aria-label={`${item.alt}. Play, pause or unmute`}>
+    <button ref={hostRef} type="button" className={styles.videoHost} onClick={onTap} aria-label={`${item.alt}. Play or pause`}>
       <span className={styles.play} aria-hidden="true">
         <svg viewBox="0 0 24 24">
           <path d="M8 5v14l11-7z" />
